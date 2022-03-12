@@ -1,18 +1,3 @@
-class Player:
-    def __init__(self, name, health=6, attack_score=1, items=[], current_tile=None, previous_tile=None,
-                 has_totem=False):
-        self.name = name
-        self.hp = health
-        self.attack_score = attack_score
-        self.items = items
-        self.current_tile = current_tile
-        self.previous_tile = previous_tile
-        self.has_totem = has_totem
-
-    def get_health(self):
-        return self.hp
-
-
 class Game:
     def __init__(self, dev_cards=[], tile_cards=[]):
         self.dev_cards = dev_cards
@@ -103,30 +88,3 @@ class DevCard(Card):
 
     def add_zombies(self):
         return self.num_zombies
-
-
-class Items:
-    def __init__(self, name, attack, weapon=False):
-        self.name = name
-        self.attack = attack
-        self.weapon = weapon
-        DevCard.add_item(self)
-
-    def desc(self):
-        return self.name + ": "
-
-
-class GameConditions:  # Win / Loss conditions
-    pass
-
-
-class Action:
-    pass
-
-
-class GameStart:
-    pass
-
-
-class Help: # for the help command
-    pass
