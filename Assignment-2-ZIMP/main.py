@@ -9,8 +9,26 @@ class Player:
         self.previous_tile = previous_tile
         self.has_totem = has_totem
 
+    def get_name(self):
+        return self.name
+
     def get_health(self):
         return self.hp
+
+    def get_attack_score(self):
+        return self.attack_score
+
+    def get_items(self):
+        return self.items
+
+    def get_current_tile(self):
+        return self.current_tile
+
+    def get_previous_tile(self):
+        return self.previous_tile
+
+    def get_has_totem(self):
+        return self.has_totem
 
 
 class Game:
@@ -75,7 +93,6 @@ class TileCard(Card):
 
 class DevCard(Card):
     def __init__(self, name, effect, item, nine_effect, ten_effect, eleven_effect, num_zombies):
-        # key for effects is Z = Zombies, D = take 1 dmg, I = Get Item
         Card.__init__(self, name, effect)
         self.num_zombies = num_zombies
         self.eleven_effect = eleven_effect
@@ -106,27 +123,53 @@ class DevCard(Card):
 
 
 class Items:
-    def __init__(self, name, attack, weapon=False):
+    def __init__(self, name, attack, weapon: bool):
         self.name = name
         self.attack = attack
         self.weapon = weapon
         DevCard.add_item(self)
 
-    def desc(self):
-        return self.name + ": "
 
+class GameRules:  # Win / Loss conditions
+    def __init__(self, end, win):
+        self.loss = end
+        self.win = win
 
-class GameConditions:  # Win / Loss conditions
-    pass
+    def has_lost(self):
+        return self.loss
+
+    def LoseGame(self):
+        if Player.get_health() == 0:
+            print("Player has Lost")
+        return self.has_lost()
+
+    def WinGame(self):
+        pass
 
 
 class Action:
-    pass
+    def __init__(self, fight, run, cower):
+        self.fight = fight
+        self.run = run
+        self.cower = cower
+
+    def fight(self):
+        # DevCard.num_zombies - Player.get_attack_score() = Player.get_health()
+        pass
+
+    def run(self):
+        # Go back to previous location, Player.get_health() - 1
+        pass
+
+    def cower(self):
+        Player.get_health() + 3
+        # Discard Top Dev Card
+        return self.cower
 
 
 class GameStart:
     pass
 
 
-class Help: # for the help command
+class Help:  # for the help command
     pass
