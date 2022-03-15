@@ -1,6 +1,22 @@
+import random
+# deck shuffling
+import cmd
+# Output
+import time
+# Timer
+
+# Todo add functionality to the Help Command - Use CMD
+# Todo - add more DevCards
+# Todo add a game loader
+# Todo add a game saver
+# Todo add a json reader - for Game Saver most likely
+# Todo add play space
+# Todo add Dev Card shuffling
+# Todo add Dev Card drawing/pulling/using
+# Todo add combat
+
 class Player:
-    def __init__(self, name, health=6, attack_score=1, items=[], inventory=[], current_tile=None, previous_tile=None,
-                 has_totem=False, time=2100):
+    def __init__(self, name, health=6, attack_score=1, items=[], inventory=[], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0):
         self.inventory = inventory
         self.name = name
         self.hp = health
@@ -10,6 +26,9 @@ class Player:
         self.previous_tile = previous_tile
         self.has_totem = has_totem
         self.game_time = time
+        self.loaded = loaded
+        self.saved = saved
+        self.turns = turns
 
     def get_name(self):
         return self.name
@@ -37,6 +56,15 @@ class Player:
 
     def get_current_time(self):
         return self.game_time
+
+    def has_loaded(self):
+        return self.loaded
+
+    def has_saved(self):
+        return self.saved
+
+    def add_turn(self):
+        return self.turns+1
 
 
 class Game:
@@ -160,29 +188,53 @@ class GameRules:  # Win / Loss conditions
 
 
 class Action:
-    def __init__(self, fight, run, cower, end_turn):
+    def __init__(self, fight, run, cower, end_turn, start_turn, move, use_items):
         self.fight = fight
         self.run = run
         self.cower = cower
         self.end = end_turn
+        self.start = start_turn
+        self.move = move
+        self.use_items = use_items
+
+    def start(self): # Starting turn
+        print("Action List: \nM: Move\nC: Cower")
+        if input("Which action would you like to perform? [M/C]") == "M":
+            return self.move
+        else:
+            return self.cower
+    
+    def move(self):
+        print("Possible movement locations for " + Player.get_current_tile + " tile: ") # Todo Display Doors here
+        input("What direction would you like to move"+ {} +": ") # Valid movement points
+        # if moved direction has zombies - Action Text for Fight, Run, Cower, UseItems
+        return self.move
 
     def fight(self):
         # DevCard.num_zombies - Player.get_attack_score() = Player.get_health()
         pass
 
     def run(self):
-        # Go back to previous location, Player.get_health() - 1
-        pass
+        Player.get_current_tile = Player.get_previous_tile
+        Player.get_health - 1
+        return self.end
 
     def cower(self):
         Player.get_health() + 3
         # Discard Top Dev Card
         return self.cower
 
-    def end_turn(self):
+    def use_items(self):
+        pass
+
+    def end(self):
+        Player.add_turn
         return self.end
 
 class GameStart:
+    if Player.get_current_time != 2100 and Player.has_loaded == False: # setting the game to 9pm when the player starts a new game
+        Player.get_current_time = 2100
+
     pass
 
 
@@ -208,22 +260,26 @@ def add_tile_cards(args): #X-location, Y-location, Name, Effect, doors[North, Ea
     TileCard(0,0,"Garden","+1 Health if ending turn here",[False,True,True,True])
 
 def add_dev_card():# name, item, nine_effect, ten_effect, 11_effect, num_zombies
-    DevCard(1,"Oil","You try hard not to wet yourself","Item","6 Zombies",num_zombies=6)
+    DevCard(1,"Oil","You try hard not to wet yourself","Item","6 Zombies",6)
+    DevCard(2,"Gasoline","4 Zombies","You sense your impending doom. -1hp","ITEM",4) #-1 HP
+    DevCard(3,"Board with Nails","ITEM","4 Zombies","Something icky in your mouth. -1hp",4)
+    DevCard(4,"Machete","4 zombies","A bat pooped in your eye. -1hp","6 zombies") # If statement needed for the zombies here
+    DevCard(5,"Grisly Femus","ITEM","5 Zombies","Your soul isn't wanted here. -1hp",5)
+    DevCard(6,"Golf Club","Slip on nasty goo. -1hp","4 Zombies","The smell of blood is in the air",4)
+    DevCard(7,"Chainsaw", "3 Zombies","You hear terrible screams", "5 Zombies") # If statement needed for the zombies here
+    DevCard(8,"Can of Soda","Candybar in your pocket. +1hp","ITEM","4 zombies",4)
+    DevCard(9,"Candle","Your whole body shivers involuntarily","You feel a spark of Hope. +1hp","4 Zombies",4)
 
-def add_items():
-    items = {
-        'Oil': 'Throw as you run away to avoid taking damage. Combine with candle to kill all zombies on one tile without taking damage. One time use',
-        'Gasoline': 'Combine with Candle to kill all zombies without taking damage. Combine with Chainsaw to give two more Chainsaw uses. One time use',
-        'Board w/ Nails': 'Add 1 to Attack Score',
-        'Can of Soda': 'Add 2 to Health Points',
-        'Grisly Femur': 'Add 1 to Attack Score',
-        'Golf Club': 'Add 1 to Attack Score',
-        'Candle': 'Combine with Oil or Gas to kill all zombies on one tile without taking damage',
-        'Chainsaw': 'Add 3 to attack score. Only has enough fuel for two battles',
-        # So this means you get +3 for 2 turns unless you give it more gas which means +3 for a total of 4 turns
-        'Machete': 'Add 2 to Attack Score'
-    }
-    Player.get_items(items)
+def add_items(): # name, attack score, weapon(T/F), desc, usable(t/f), use_count
+    Items("Oil", 0, False, "Throw as you run away to avoid taking damage. COMBIE with candle to kill all zombies on one tile without taking damage. One time use", True, 1)
+    Items("Gasoline",0,False,"COMBIE with Candle to kill all zombies without taking damage. COMBIE with Chainsaw to give two more Chainsaw uses. One time use",True,1)
+    Items("Board with Nails", 1, True,"+1 Attack Score")
+    Items("Can of Soda", 0,False,"Add 2 to Health Points",True, 1)
+    Items("Grisly Femur",1,True,"+1 to Attack Score")
+    Items("Golf Club",1,True,"+1 to Attack Score")
+    Items("Candle",0,False,"COMBIE with Oil or Gasoline to kill all zombies on ONE tile without taking Damage")
+    Items("Chainsaw",3,True,"+3 to Attack Score - Only has enough Fuel for 2 battles -- COMBIE with Gasoline for two more uses")
+    Items("Machete",2,True,"+2 Attack Score")
 
 
 def get_totem(self, use_card):
@@ -234,3 +290,22 @@ def get_totem(self, use_card):
             pass # Draw Card
         else:
             pass
+
+def load_game():
+    Player.has_loaded == True
+
+def save_game():
+    if Player.has_saved == False:
+        t = 120
+        while t:
+            mins, secs = divmod(t, 120)
+            timer = '{:02d}:{:02d}'.format(mins,secs)
+            timer
+            time.sleep(1)
+            t -= 1
+        if t == 0:
+            print("You have not saved in a 2 minutes. Please do save :)")
+    pass
+
+def json_reader():
+    pass
