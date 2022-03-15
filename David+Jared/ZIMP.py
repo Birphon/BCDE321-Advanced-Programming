@@ -5,6 +5,8 @@ import cmd
 import time
 # Timer
 
+
+# -- If you finish a Todo add 'DONE' beside it --
 # Todo add functionality to the Help Command - Use CMD
 # Todo - add more DevCards
 # Todo add a game loader
@@ -14,6 +16,9 @@ import time
 # Todo add Dev Card shuffling
 # Todo add Dev Card drawing/pulling/using
 # Todo add combat
+# Todo Movement
+# Todo Tile rotation
+# Todo Tile placement
 
 class Player:
     def __init__(self, name, health=6, attack_score=1, items=[], inventory=[], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0):
