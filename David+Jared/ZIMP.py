@@ -6,7 +6,7 @@ import time
 # Timer
 
 class Player:
-    def __init__(self, name, health=6, attack_score=1, items=[], inventory=[], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0):
+    def __init__(self, name, health=6, attack_score=1, items=[], inventory=[{},{}], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0): # i think the inventory=[{},{}] will limit to two items
         self.inventory = inventory
         self.name = name
         self.hp = health
@@ -146,11 +146,18 @@ class DevCard(Card):
 
 
 class Items:
-    def __init__(self, name, attack, weapon: bool):
+    def __init__(self, name="", attack=0, weapon=False, desc="", usable=True):
         self.name = name
         self.attack = attack
         self.weapon = weapon
+        self.desc = desc
+        self.usable = usable
         DevCard.add_item(self)
+
+        if Items.weapon == False:
+            Items.usable == True
+        else:
+            Items.usable == False
 
 
 class GameRules:  # Win / Loss conditions
@@ -215,6 +222,12 @@ class Action:
         return self.cower
 
     def use_items(self):
+        if Player.inventory == "" and Player.inventory == "": # Gasoline and Candle
+            DevCard.add_zombies == 0
+        if Player.inventory == "" and Player.inventory == "": # Oil and Candle
+            DevCard.add_zombies == 0
+        if Player.inventory == "" and Player.inventory == "": # Gasoline + Chainsaw
+            pass # Items.Chainsaw(uses)+2
         pass
 
     def end(self):
@@ -261,10 +274,10 @@ def add_dev_card():# name, item, nine_effect, ten_effect, 11_effect, num_zombies
     DevCard(9,"Candle","Your whole body shivers involuntarily","You feel a spark of Hope. +1hp","4 Zombies",4)
 
 def add_items(): # name, attack score, weapon(T/F), desc, usable(t/f), use_count
-    Items("Oil", 0, False, "Throw as you run away to avoid taking damage. COMBIE with candle to kill all zombies on one tile without taking damage. One time use", True, 1)
-    Items("Gasoline",0,False,"COMBIE with Candle to kill all zombies without taking damage. COMBIE with Chainsaw to give two more Chainsaw uses. One time use",True,1)
+    Items("Oil", 0, False, "Throw as you run away to avoid taking damage. COMBIE with candle to kill all zombies on one tile without taking damage. One time use")
+    Items("Gasoline",0,False,"COMBIE with Candle to kill all zombies without taking damage. COMBIE with Chainsaw to give two more Chainsaw uses. One time use")
     Items("Board with Nails", 1, True,"+1 Attack Score")
-    Items("Can of Soda", 0,False,"Add 2 to Health Points",True, 1)
+    Items("Can of Soda", 0,False,"Add 2 to Health Points")
     Items("Grisly Femur",1,True,"+1 to Attack Score")
     Items("Golf Club",1,True,"+1 to Attack Score")
     Items("Candle",0,False,"COMBIE with Oil or Gasoline to kill all zombies on ONE tile without taking Damage")
