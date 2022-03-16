@@ -6,7 +6,7 @@ import time
 # Timer
 
 class Player:
-    def __init__(self, name, health=6, attack_score=1, items=[], inventory=[{},{}], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0): # i think the inventory=[{},{}] will limit to two items
+    def __init__(self, name, chart, health=6, attack_score=1, items=[], inventory=[{},{}], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0): # i think the inventory=[{},{}] will limit to two items
         self.inventory = inventory
         self.name = name
         self.hp = health
@@ -19,6 +19,9 @@ class Player:
         self.loaded = loaded
         self.saved = saved
         self.turns = turns
+        self.chart = chart 
+            # Drawing charts - Health and Attack Score per turn?
+            # possible to draw an inventory when the user has an item?
 
     def get_name(self):
         return self.name
