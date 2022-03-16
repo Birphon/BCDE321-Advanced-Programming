@@ -1,5 +1,5 @@
 # -- If you finish a Todo: add 'DONE' beside it --
-# Todo: Join the Discord ;) https://discord.gg/wrX33AK7r9
+# Todo: Join the Discord ;) https://discord.gg/wrX33AK7r9 DONE LOL
 # Todo: add functionality to the Help Command - Use CMD
 # Todo: - add more DevCards
 # Todo: add a game loader
