@@ -9,11 +9,11 @@
 # Todo: add Dev Card shuffling
 # Todo: add Dev Card drawing/pulling/using
 # Todo: add combat
-# Todo: Movement
+# Todo: Movement # Trying to do this (Not going well)
 # Todo: Tile rotation
 # Todo: Tile placement
 # ----- Assignment Requirements -----
-# Todo: Support CLI args
+# Todo: Support CLI args # And trying to do this (Also not going well)
 # Todo: Has line oriented interactive command interpreter based on cmd or similar package
 # Todo: Display command line help of available commands
 # Todo: Change commands and options
