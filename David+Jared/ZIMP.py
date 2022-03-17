@@ -1,12 +1,21 @@
-import random
 # deck shuffling
-import cmd
+import random
 # Output
-import time
+import cmd
+from sqlite3 import Row
 # Timer
+import time
+# CSV
+import csv
+# Pandas
+import pandas as pd
+# MathPlotLib
+import matplotlib.pyplot as plt
+# JSON
+import json
 
 class Player:
-    def __init__(self, name, chart, health=6, attack_score=1, items=[], inventory=[{},{}], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0): # i think the inventory=[{},{}] will limit to two items
+    def __init__(self, csv_file, name, chart, health=6, attack_score=1, items=[], inventory=[{},{}], current_tile=None, previous_tile=None, has_totem=False, time=2100, loaded=False, saved=False ,turns=0): # i think the inventory=[{},{}] will limit to two items
         self.inventory = inventory
         self.name = name
         self.hp = health
@@ -16,12 +25,13 @@ class Player:
         self.previous_tile = previous_tile
         self.has_totem = has_totem
         self.game_time = time
+        self.csv_file - csv_file
         self.loaded = loaded
         self.saved = saved
         self.turns = turns
         self.chart = chart 
-            # Drawing charts - Health and Attack Score per turn?
-            # possible to draw an inventory when the user has an item?
+            # Drawing charts - Health per turn?
+                # Need to use a CSV for charts
 
     def get_name(self):
         return self.name
@@ -58,6 +68,9 @@ class Player:
 
     def add_turn(self):
         return self.turns+1
+
+    def get_csv(self):
+        return self.csv_file
 
 
 class Game:
@@ -315,3 +328,23 @@ def save_game():
 
 def json_reader():
     pass
+
+
+# Possibly working system idk lmao
+class Health_Graph():
+    data = [
+        [Player.get_health, Player.add_turn] # Actually this will break here lmao
+    ]
+
+    def csv_writer():
+        with open('..\David+Jared\CSV\player_health.csv', 'w', encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
+
+    def graph_drawing():
+        plt.rcParams["figure.figsize"] = [7, 3]
+        plt.rcParams["figure.autolayout"] = True
+        headers = ['Turn', 'Health']
+        df = pd.read_csv('player_health.csv', names=headers)
+        df.set_index('Turn').plot()
+        plt.show()
