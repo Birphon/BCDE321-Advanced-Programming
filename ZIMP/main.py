@@ -1,6 +1,6 @@
 import pickle
 import random
-from directions import Direction as d
+from directions import Direction as Dir
 import pandas as pd
 import cmd
 import openpyxl
@@ -77,12 +77,12 @@ class Game:
             if tile[2] == "Outdoor":
                 new_tile = OutdoorTile(tile[0], tile[1], doors)
                 if tile[0] == "Patio":
-                    new_tile.set_entrance(d.NORTH)
+                    new_tile.set_entrance(Dir.NORTH)
                 self.outdoor_tiles.append(new_tile)
             if tile[2] == "Indoor":
                 new_tile = IndoorTile(tile[0], tile[1], doors)
                 if tile[0] == "Dining Room":
-                    new_tile.set_entrance(d.NORTH)
+                    new_tile.set_entrance(Dir.NORTH)
                 self.indoor_tiles.append(new_tile)
 
     def draw_tile(self, x, y):
@@ -156,13 +156,13 @@ class Game:
             return False
 
     def get_destination_coords(self, direction):  # Gets the x and y value of the proposed move
-        if direction == d.NORTH:
+        if direction == Dir.NORTH:
             return self.player.get_x(), self.player.get_y() - 1
-        if direction == d.SOUTH:
+        if direction == Dir.SOUTH:
             return self.player.get_x(), self.player.get_y() + 1
-        if direction == d.EAST:
+        if direction == Dir.EAST:
             return self.player.get_x() + 1, self.player.get_y()
-        if direction == d.WEST:
+        if direction == Dir.WEST:
             return self.player.get_x() - 1, self.player.get_y()
 
     def check_for_door(self, direction):  # Takes a direction and checks if the current room has a door there
@@ -181,45 +181,45 @@ class Game:
     def check_doors_align(self, direction):
         if self.chosen_tile.name == "Foyer":
             return True
-        if direction == d.NORTH:
-            if d.SOUTH not in self.chosen_tile.doors:
+        if direction == Dir.NORTH:
+            if Dir.SOUTH not in self.chosen_tile.doors:
                 return False
-        if direction == d.SOUTH:
-            if d.NORTH not in self.chosen_tile.doors:
+        if direction == Dir.SOUTH:
+            if Dir.NORTH not in self.chosen_tile.doors:
                 return False
-        if direction == d.WEST:
-            if d.EAST not in self.chosen_tile.doors:
+        if direction == Dir.WEST:
+            if Dir.EAST not in self.chosen_tile.doors:
                 return False
-        elif direction == d.EAST:
-            if d.WEST not in self.chosen_tile.doors:
+        elif direction == Dir.EAST:
+            if Dir.WEST not in self.chosen_tile.doors:
                 return False
         return True
 
     def check_entrances_align(self):
-        if self.get_current_tile().entrance == d.NORTH:
-            if self.chosen_tile.entrance == d.SOUTH:
+        if self.get_current_tile().entrance == Dir.NORTH:
+            if self.chosen_tile.entrance == Dir.SOUTH:
                 return True
-        if self.get_current_tile().entrance == d.SOUTH:
-            if self.chosen_tile.entrance == d.NORTH:
+        if self.get_current_tile().entrance == Dir.SOUTH:
+            if self.chosen_tile.entrance == Dir.NORTH:
                 return True
-        if self.get_current_tile().entrance == d.WEST:
-            if self.chosen_tile.entrance == d.EAST:
+        if self.get_current_tile().entrance == Dir.WEST:
+            if self.chosen_tile.entrance == Dir.EAST:
                 return True
-        if self.get_current_tile().entrance == d.EAST:
-            if self.chosen_tile.entrance == d.WEST:
+        if self.get_current_tile().entrance == Dir.EAST:
+            if self.chosen_tile.entrance == Dir.WEST:
                 return True
         return print(" Dining room and Patio entrances dont align")
 
     def check_dining_room_has_exit(self):
         tile = self.chosen_tile
         if tile.name == "Dining Room":
-            if self.current_move_direction == d.NORTH and tile.entrance == d.SOUTH:
+            if self.current_move_direction == Dir.NORTH and tile.entrance == Dir.SOUTH:
                 return False
-            if self.current_move_direction == d.SOUTH and tile.entrance == d.NORTH:
+            if self.current_move_direction == Dir.SOUTH and tile.entrance == Dir.NORTH:
                 return False
-            if self.current_move_direction == d.EAST and tile.entrance == d.WEST:
+            if self.current_move_direction == Dir.EAST and tile.entrance == Dir.WEST:
                 return False
-            if self.current_move_direction == d.WEST and tile.entrance == d.EAST:
+            if self.current_move_direction == Dir.WEST and tile.entrance == Dir.EAST:
                 return False
         else:
             return True
@@ -490,13 +490,13 @@ class Game:
     def resolve_doors(n, e, s, w):
         doors = []
         if n == 1:
-            doors.append(d.NORTH)
+            doors.append(Dir.NORTH)
         if e == 1:
-            doors.append(d.EAST)
+            doors.append(Dir.EAST)
         if s == 1:
-            doors.append(d.SOUTH)
+            doors.append(Dir.SOUTH)
         if w == 1:
-            doors.append(d.WEST)
+            doors.append(Dir.WEST)
         return doors
 
     def lose_game(self):
@@ -626,29 +626,29 @@ class Tile:
         self.entrance = direction
 
     def rotate_entrance(self):
-        if self.entrance == d.NORTH:
-            self.set_entrance(d.EAST)
+        if self.entrance == Dir.NORTH:
+            self.set_entrance(Dir.EAST)
             return
-        if self.entrance == d.SOUTH:
-            self.set_entrance(d.WEST)
+        if self.entrance == Dir.SOUTH:
+            self.set_entrance(Dir.WEST)
             return
-        if self.entrance == d.EAST:
-            self.set_entrance(d.SOUTH)
+        if self.entrance == Dir.EAST:
+            self.set_entrance(Dir.SOUTH)
             return
-        if self.entrance == d.WEST:
-            self.set_entrance(d.NORTH)
+        if self.entrance == Dir.WEST:
+            self.set_entrance(Dir.NORTH)
             return
 
     def rotate_tile(self):  # Will rotate the tile 1 position clockwise
         for door in self.doors:
-            if door == d.NORTH:
-                self.change_door_position(self.doors.index(door), d.EAST)
-            if door == d.EAST:
-                self.change_door_position(self.doors.index(door), d.SOUTH)
-            if door == d.SOUTH:
-                self.change_door_position(self.doors.index(door), d.WEST)
-            if door == d.WEST:
-                self.change_door_position(self.doors.index(door), d.NORTH)
+            if door == Dir.NORTH:
+                self.change_door_position(self.doors.index(door), Dir.EAST)
+            if door == Dir.EAST:
+                self.change_door_position(self.doors.index(door), Dir.SOUTH)
+            if door == Dir.SOUTH:
+                self.change_door_position(self.doors.index(door), Dir.WEST)
+            if door == Dir.WEST:
+                self.change_door_position(self.doors.index(door), Dir.NORTH)
 
 
 class IndoorTile(Tile):
@@ -728,13 +728,13 @@ class Commands(cmd.Cmd):
         if direction not in valid_inputs:
             return print("Input a valid direction. (Check choose help for more information)")
         if direction == 'n':
-            direction = d.NORTH
+            direction = Dir.NORTH
         if direction == "e":
-            direction = d.EAST
+            direction = Dir.EAST
         if direction == "s":
-            direction = d.SOUTH
+            direction = Dir.SOUTH
         if direction == "w":
-            direction = d.WEST
+            direction = Dir.WEST
         if self.game.state == "Choosing Door":
             self.game.can_cower = False
             self.game.choose_door(direction)
@@ -744,7 +744,7 @@ class Commands(cmd.Cmd):
     def do_n(self, line):
         """Moves the player North"""
         if self.game.state == "Moving":
-            self.game.select_move(d.NORTH)
+            self.game.select_move(Dir.NORTH)
             self.game.get_game()
         else:
             print("Player not ready to move")
@@ -752,7 +752,7 @@ class Commands(cmd.Cmd):
     def do_s(self, line):
         """Moves the player South"""
         if self.game.state == "Moving":
-            self.game.select_move(d.SOUTH)
+            self.game.select_move(Dir.SOUTH)
             self.game.get_game()
         else:
             print("Player not ready to move")
@@ -760,7 +760,7 @@ class Commands(cmd.Cmd):
     def do_e(self, line):
         """Moves the player East"""
         if self.game.state == "Moving":
-            self.game.select_move(d.EAST)
+            self.game.select_move(Dir.EAST)
             self.game.get_game()
         else:
             print("Player not ready to move")
@@ -768,7 +768,7 @@ class Commands(cmd.Cmd):
     def do_w(self, line):
         """Moves the player West"""
         if self.game.state == "Moving":
-            self.game.select_move(d.WEST)
+            self.game.select_move(Dir.WEST)
             self.game.get_game()
         else:
             print("Player not ready to move")
@@ -860,13 +860,13 @@ class Commands(cmd.Cmd):
         """Given a direction will flee attacking zombies at a price of one health"""
         if self.game.state == "Attacking":
             if direction == 'n':
-                self.game.trigger_run(d.NORTH)
+                self.game.trigger_run(Dir.NORTH)
             elif direction == 'e':
-                self.game.trigger_run(d.EAST)
+                self.game.trigger_run(Dir.EAST)
             elif direction == 's':
-                self.game.trigger_run(d.SOUTH)
+                self.game.trigger_run(Dir.SOUTH)
             elif direction == 'w':
-                self.game.trigger_run(d.WEST)
+                self.game.trigger_run(Dir.WEST)
             else:
                 print("Cannot run that direction")
             if len(self.game.get_current_tile().doors) == 1 and self.game.chosen_tile.name != "Foyer":
@@ -908,6 +908,18 @@ class Commands(cmd.Cmd):
         """Shows the status of the player"""
         if self.game.state != "Game Over":
             self.game.get_player_status()
+
+# Attempt at save game
+    def save_game(self, line):
+        if len(self.game.tiles) == 0:
+            return print("Please start the game before saving")
+        else:
+            save_game = line + '.pickle'
+        with open(save_game, 'SG') as s:
+            pickle.dump(self.game, s)
+
+        if not line:
+            return print("Please enter a name for the saved game state")
 
 
 if __name__ == "__main__":
