@@ -22,8 +22,10 @@
 # Todo: Validate Data
     # idk what this one would be
 # Todo: Provides Object-persistence/ Object Serialization using either pickle or shelves
+    # Written code for this but don't know how to test have to ask Alec - Daniel
 # Todo: Can load data from a file
     # I assume this is just loading a saved game
+    # Written code for this but don't know how to test have to ask Alec - Daniel
 # Todo: Can deal with a directory
     # We can make this Load a game form a "Saves" Folder
 # Todo: Can raise exceptions and provide exception handling DONE (but may want to update to make different from Alec and Cameron's code)
@@ -32,6 +34,7 @@
     # Pain
 # Todo: Provide Unittests
     # Pain
+    # Working on
 # Todo: Pretty print, e.g., print the final turn sequence in a pretty way; or displaying data in chart/ diagram, e.g., bar chart, pie chart, UML diagram
 # Todo: Can save and read data from a    database, e.g., SQLite, MySQL and MongoDB
     # Kinda working on this one
