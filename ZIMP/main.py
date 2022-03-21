@@ -914,12 +914,25 @@ class Commands(cmd.Cmd):
         if len(self.game.tiles) == 0:
             return print("Please start the game before saving")
         else:
-            save_game = line + '.pickle'
-        with open(save_game, 'SG') as s:
-            pickle.dump(self.game, s)
+            save = line + '.pickle'
+        with open(save, 'SG') as sg:
+            pickle.dump(self.game, sg)
 
         if not line:
             return print("Please enter a name for the saved game state")
+
+# Attempt at load game
+    def load_game(self, save):
+        load = save + '.pickle'
+        try:
+            with open(load, 'LG') as lg:
+                self.game = pickle.load(lg)
+                self.game.get_game()
+        except FileNotFoundError:
+            print("File not found please check name of save")
+
+        if not save:
+            return print("Please enter a valid name of a save")
 
 
 if __name__ == "__main__":
