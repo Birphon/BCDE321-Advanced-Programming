@@ -10,13 +10,14 @@ class Game:
     def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
                  dev_cards=None, state="Starting", current_move_direction=None, can_cower=True):
         if indoor_tiles is None:
-            indoor_tiles = []  # Will contain a list of all available indoor tiles
+            indoor_tiles = []
         if outdoor_tiles is None:
-            outdoor_tiles = []  # Will contain a list of all available outdoor tiles
+            outdoor_tiles = []
         if dev_cards is None:
-            dev_cards = []  # Will contain a list of all available development cards
+            dev_cards = []
         if game_map is None:
-            game_map = {}  # Tiles dictionary will have the x and y co-ords as the key and the Tile object as the value
+            game_map = {}
+
         self.player = player
         self.time = time
         self.indoor_tiles = indoor_tiles
@@ -33,8 +34,10 @@ class Game:
     def start_game(self):
         self.load_tiles()
         self.load_dev_cards()
+        print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then ' \
+              'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
         for tile in self.indoor_tiles:
-            if tile.name == 'Foyer':  # Game always starts in the Foyer at 16,16
+            if tile.name == 'Foyer':
                 self.chosen_tile = tile
                 self.state = "Rotating"
                 break
@@ -43,17 +46,17 @@ class Game:
         s = ''
         f = ''
         if self.state == "Moving":
-            s = "In this state you are able to move the player using the movement commands of n, e, s, w"
+            s = "In this state you can move by typing 'n, e, s, w' "
         if self.state == "Rotating":
-            s = "Use the rotate command to rotate tiles and align doors," \
-                " Once you are happy with the door position you can place the tile with the place command"
+            s = "Type 'rotate' until the door of the current tile are aligned with the new tile" \
+                " Once you are happy with the door position you can place the tile by typing 'place' "
         if self.state == "Choosing Door":
-            s = "Choose where to place a new door with the choose command + n, e, s, w"
+            s = "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
         if self.state == "Drawing Dev Card":
-            s = "Use the draw command to draw a random development card"
+            s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing depending on the time"
         for door in self.chosen_tile.doors:
             f += door.name + ', '
-        return print(f' The chosen tile is {self.chosen_tile.name}, the available doors in this room are {f}\n '
+        return print(f' Your current tile is {self.chosen_tile.name}, the available doors in this room are {f}\n '
                      f'The state is {self.state}. {s} \n Special Entrances : {self.chosen_tile.entrance}')
 
     def get_player_status(self):
@@ -676,7 +679,8 @@ class OutdoorTile(Tile):
 
 
 class Commands(cmd.Cmd):
-    intro = 'Welcome, type help or ? to list the commands or start to start the game'
+    intro = 'Welcome to Zombie in My Pocket type "start" to start playing the game, if you need help at any time type ' \
+            '"help" or "?". Good Luck '
 
     def __init__(self):
         cmd.Cmd.__init__(self)
@@ -684,24 +688,67 @@ class Commands(cmd.Cmd):
         self.player = Player()
         self.game = Game(self.player)
 
+    # Puts the game into start state
     def do_start(self, line):
-        """Starts a new game"""
         if self.game.state == "Starting":
             self.game.start_game()
             self.game.get_game()
         else:
-            print("Game has already Started")
+            print("You are currently playing a game type 'restart' if you want to start again")
 
+    # Move to a north tile
+    def do_n(self, line):
+        if self.game.state == "Moving":
+            self.game.select_move(Dir.NORTH)
+            self.game.get_game()
+            self.game.get_player_status()
+        else:
+            print("You are not currently in Move state")
+
+    # Move to a south tile
+    def do_s(self, line):
+        if self.game.state == "Moving":
+            self.game.select_move(Dir.SOUTH)
+            self.game.get_game()
+            self.game.get_player_status()
+        else:
+            print("You are not currently in Move state")
+
+    # Move to a east tile
+    def do_e(self, line):
+        if self.game.state == "Moving":
+            self.game.select_move(Dir.EAST)
+            self.game.get_game()
+            self.game.get_player_status()
+        else:
+            print("You are not currently in Move state")
+
+    # Move to a west tile
+    def do_w(self, line):
+        if self.game.state == "Moving":
+            self.game.select_move(Dir.WEST)
+            self.game.get_game()
+            self.game.get_player_status()
+        else:
+            print("You are not currently in Move state")
+
+    # Puts player in draw state so player draws a dev card
+    def do_draw(self, line):
+        if self.game.state == "Drawing Dev Card":
+            self.game.trigger_dev_card(self.game.time)
+        else:
+            print("You are not in the drawing state")
+
+    # Puts the game into rotate state
     def do_rotate(self, line):
-        """Rotates the current map piece 1 rotation clockwise"""
         if self.game.state == "Rotating":
             self.game.rotate()
             self.game.get_game()
         else:
-            print("Tile not chosen to rotate")
+            print("You currently don't have a tile selected to rotate")
 
+    # Puts the game into place state
     def do_place(self, line):
-        """Places the current map tile"""
         if self.game.state == "Rotating":
             if self.game.chosen_tile.name == "Foyer":
                 self.game.place_tile(16, 16)
@@ -717,16 +764,16 @@ class Commands(cmd.Cmd):
                     self.game.place_tile(self.game.chosen_tile.x, self.game.chosen_tile.y)
                     self.game.move_player(self.game.chosen_tile.x, self.game.chosen_tile.y)
                 else:
-                    print(" Must have at least one door facing the way you came from")
+                    print(" Please rotate the tile you are placing until a door lines up with the direction you moved")
             self.game.get_game()
         else:
-            print("Tile not chosen to place")
+            print("You currently don't have a tile selected")
 
+    # Select a direction to create a door if tile does not have any
     def do_choose(self, direction):
-        """When a zombie door attack is completed. Use this command to select an exit door with a valid direction"""
-        valid_inputs = ["n", "e", "s", "w"]
-        if direction not in valid_inputs:
-            return print("Input a valid direction. (Check choose help for more information)")
+        dir_choice = ["n", "e", "s", "w"]
+        if direction not in dir_choice:
+            return print("Invalid input please type 'choose' and one of 'n', 'e', 's', 'w' ")
         if direction == 'n':
             direction = Dir.NORTH
         if direction == "e":
@@ -739,129 +786,65 @@ class Commands(cmd.Cmd):
             self.game.can_cower = False
             self.game.choose_door(direction)
         else:
-            print("Cannot choose a door right now")
+            print("Your cannot create a door in this room")
 
-    def do_n(self, line):
-        """Moves the player North"""
-        if self.game.state == "Moving":
-            self.game.select_move(Dir.NORTH)
-            self.game.get_game()
-            self.game.get_player_status()
-        else:
-            print("Player not ready to move")
-
-    def do_s(self, line):
-        """Moves the player South"""
-        if self.game.state == "Moving":
-            self.game.select_move(Dir.SOUTH)
-            self.game.get_game()
-            self.game.get_player_status()
-        else:
-            print("Player not ready to move")
-
-    def do_e(self, line):
-        """Moves the player East"""
-        if self.game.state == "Moving":
-            self.game.select_move(Dir.EAST)
-            self.game.get_game()
-            self.game.get_player_status()
-        else:
-            print("Player not ready to move")
-
-    def do_w(self, line):
-        """Moves the player West"""
-        if self.game.state == "Moving":
-            self.game.select_move(Dir.WEST)
-            self.game.get_game()
-            self.game.get_player_status()
-        else:
-            print("Player not ready to move")
-
-    def do_restart(self, line):
-        """Deletes your progress and ends the game"""
-        del self.game
-        del self.player
-        self.player = Player()
-        self.game = Game(self.player)
-
+    # Calculates players damage taken when attacking zombies
     def do_attack(self, line):
-        """Player attacks the zombies"""
-        arg1 = ''
-        arg2 = 0
+        item1 = ''
+        item2 = 0
         if "," in line:
-            arg1, arg2 = [item for item in line.split(", ")]
+            item1, item2 = [item for item in line.split(", ")]
         else:
-            arg1 = line
+            item1 = line
 
         if self.game.state == "Attacking":
-            if arg1 == '':
+            if item1 == '':
                 self.game.trigger_attack()
-            elif arg2 == 0:
-                self.game.trigger_attack(arg1)
-            elif arg1 != '' and arg2 != 0:
-                self.game.trigger_attack(arg1, arg2)
+            elif item2 == 0:
+                self.game.trigger_attack(item1)
+            elif item1 != '' and item2 != 0:
+                self.game.trigger_attack(item1, item2)
 
             if len(self.game.chosen_tile.doors) == 1 and self.game.chosen_tile.name != "Foyer":
                 self.game.state = "Choosing Door"
                 self.game.get_game()
             if self.game.state == "Game Over":
-                print("You lose, game over, you have succumbed to the zombie horde")
-                print("To play again, type 'restart'")
+                print("Sorry you lose, game over")
+                print("Type 'restart' to play again")
             else:
                 self.game.get_game()
         else:
-            print("You cannot attack right now")
+            print("There is nothing to attack")
 
+    # Lets players use items
     def do_use(self, line):
-        """Player uses item"""
-        arg1 = ''
-        arg2 = 0
+        item1 = ''
+        item2 = 0
         if "," in line:
-            arg1, arg2 = [item for item in line.split(", ")]
+            item1, item2 = [item for item in line.split(", ")]
         else:
-            arg1 = line
+            item1 = line
 
         if self.game.state == "Moving":
-            if arg1 == '':
+            if item1 == '':
                 return
-            if arg2 == 0:
-                self.game.use_item(arg1)
-            elif arg1 != '' and arg2 != 0:
-                self.game.use_item(arg1, arg2)
+            if item2 == 0:
+                self.game.use_item(item1)
+            elif item1 != '' and item2 != 0:
+                self.game.use_item(item1, item2)
         else:
             print("You cannot do that right now")
 
-    # Not finished yet, needs testing for spelling
-    def do_drop(self, item):
-        """Drops an item from your hand"""
-        if self.game.state != "Game Over":
-            self.game.drop_item(item)
-            self.game.get_game()
-
+    # Lets players swap items
     def do_swap(self, line):
-        """Swaps an item in you hand with the one in the room"""
         if self.game.state == "Swapping Item":
             self.game.drop_item(line)
             self.game.player.add_item(self.game.room_item[0], self.game.room_item[1])
             self.game.room_item = None
             self.game.get_game()
 
-    def do_draw(self, line):
-        """Draws a new development card (Must be done after evey move)"""
-        if self.game.state == "Drawing Dev Card":
-            self.game.trigger_dev_card(self.game.time)
-        else:
-            print("Cannot currently draw a card")
-
-    # DELETE LATER, DEV COMMANDS FOR TESTING
-    def do_give(self, line):
-        self.game.player.add_item("Oil", 2)
-
-    def do_give2(self, line):
-        self.game.player.add_item("Candle", 1)
-
+    # Lets players run from zombies
     def do_run(self, direction):
-        """Given a direction will flee attacking zombies at a price of one health"""
         if self.game.state == "Attacking":
             if direction == 'n':
                 self.game.trigger_run(Dir.NORTH)
@@ -879,39 +862,48 @@ class Commands(cmd.Cmd):
         else:
             print("Cannot run when not being attacked")
 
+    # Lets players cower from zombies to avoid damage but at the cost of an increase to the time
     def do_cower(self, line):
-        """When attacked use this command to cower. You will take no damage but will advance the time"""
         if self.game.state == "Moving":
             self.game.trigger_cower()
         else:
-            print("Cannot cower while right now")
+            print("You cannot cower if you are not being attacked")
 
+    # Lets players find the totem in the evil temple at the cost of a card
     def do_search(self, line):
-        """Searches for the zombie totem. (Player must be in the evil temple and will have to resolve a dev card)"""
         if self.game.state == "Moving":
             self.game.search_for_totem()
         else:
-            print("Cannot search currently")
+            print("You cannot search for the totem here")
 
+    # Lets players bury the totem in the graveyard at the cost of a card
     def do_bury(self, line):
-        """Buries the totem. (Player must be in the graveyard and will have to resolve a dev card)"""
         if self.game.state == "Moving":
             self.game.bury_totem()
         else:
-            print("Cannot currently bury the totem")
+            print("You cannot bury for the totem here")
 
-    def do_prompt(self, line):
-        """Change the interactive prompt"""
-        self.prompt = line + ': '
-
+    # Lets player exit the game
     def do_exit(self, line):
-        """Exits the game without saving"""
         return True
 
+    # Lets player see characters status
     def do_status(self, line):
-        """Shows the status of the player"""
         if self.game.state != "Game Over":
             self.game.get_player_status()
+
+    # Not finished yet
+    def do_drop(self, item):
+        if self.game.state != "Game Over":
+            self.game.drop_item(item)
+            self.game.get_game()
+
+    #  Restarts the game
+    def do_restart(self, line):
+        del self.game
+        del self.player
+        self.player = Player()
+        self.game = Game(self.player)
 
     # save game working - Daniel
     def do_save(self, line):
