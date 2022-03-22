@@ -14,8 +14,8 @@
 # Todo: Tile placement (on new version)
 # ----- Assignment Requirements -----
 # Todo: Support CLI args DONE (but may want to update to make different from Alec and Cameron's code)
-# Todo: Has line oriented interactive command interpreter based on cmd or similar package DONE (but may want to update to make different from Alec and Cameron's code)
-# Todo: Display command line help of available commands DONE (but may want to update to make different from Alec and Cameron's code)
+# Todo: Has line oriented interactive command interpreter based on cmd or similar package DONE - Daniel
+# Todo: Display command line help of available commands DONE - Daniel
 # Todo: Change commands and options
 # Todo: Extract Data
     # idk what this one would be

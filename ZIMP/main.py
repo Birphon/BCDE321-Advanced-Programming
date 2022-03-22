@@ -1,9 +1,22 @@
-import pickle
+# deck shuffling
+import csv
 import random
-from directions import Direction as Dir
-import pandas as pd
+# Output
 import cmd
+#  Graphs
+from sqlite3 import Row
+# Timer
+import time
+#  Directions
+from directions import Direction as dir
+import pandas as pd
 import openpyxl
+# MathPlotLib
+import matplotlib.pyplot as plt
+# JSON
+import json
+#  Save and load Game
+import pickle
 
 
 class Game:
@@ -34,13 +47,15 @@ class Game:
     def start_game(self):
         self.load_tiles()
         self.load_dev_cards()
-        print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then ' \
+        print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
               'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
         for tile in self.indoor_tiles:
             if tile.name == 'Foyer':
                 self.chosen_tile = tile
                 self.state = "Rotating"
                 break
+
+    """Type the 'start' command when the game is in starting state"""
 
     def get_game(self):
         s = ''
@@ -80,12 +95,12 @@ class Game:
             if tile[2] == "Outdoor":
                 new_tile = OutdoorTile(tile[0], tile[1], doors)
                 if tile[0] == "Patio":
-                    new_tile.set_entrance(Dir.NORTH)
+                    new_tile.set_entrance(dir.NORTH)
                 self.outdoor_tiles.append(new_tile)
             if tile[2] == "Indoor":
                 new_tile = IndoorTile(tile[0], tile[1], doors)
                 if tile[0] == "Dining Room":
-                    new_tile.set_entrance(Dir.NORTH)
+                    new_tile.set_entrance(dir.NORTH)
                 self.indoor_tiles.append(new_tile)
 
     def draw_tile(self, x, y):
@@ -159,13 +174,13 @@ class Game:
             return False
 
     def get_destination_coords(self, direction):  # Gets the x and y value of the proposed move
-        if direction == Dir.NORTH:
+        if direction == dir.NORTH:
             return self.player.get_x(), self.player.get_y() - 1
-        if direction == Dir.SOUTH:
+        if direction == dir.SOUTH:
             return self.player.get_x(), self.player.get_y() + 1
-        if direction == Dir.EAST:
+        if direction == dir.EAST:
             return self.player.get_x() + 1, self.player.get_y()
-        if direction == Dir.WEST:
+        if direction == dir.WEST:
             return self.player.get_x() - 1, self.player.get_y()
 
     def check_for_door(self, direction):  # Takes a direction and checks if the current room has a door there
@@ -184,45 +199,45 @@ class Game:
     def check_doors_align(self, direction):
         if self.chosen_tile.name == "Foyer":
             return True
-        if direction == Dir.NORTH:
-            if Dir.SOUTH not in self.chosen_tile.doors:
+        if direction == dir.NORTH:
+            if dir.SOUTH not in self.chosen_tile.doors:
                 return False
-        if direction == Dir.SOUTH:
-            if Dir.NORTH not in self.chosen_tile.doors:
+        if direction == dir.SOUTH:
+            if dir.NORTH not in self.chosen_tile.doors:
                 return False
-        if direction == Dir.WEST:
-            if Dir.EAST not in self.chosen_tile.doors:
+        if direction == dir.WEST:
+            if dir.EAST not in self.chosen_tile.doors:
                 return False
-        elif direction == Dir.EAST:
-            if Dir.WEST not in self.chosen_tile.doors:
+        elif direction == dir.EAST:
+            if dir.WEST not in self.chosen_tile.doors:
                 return False
         return True
 
     def check_entrances_align(self):
-        if self.get_current_tile().entrance == Dir.NORTH:
-            if self.chosen_tile.entrance == Dir.SOUTH:
+        if self.get_current_tile().entrance == dir.NORTH:
+            if self.chosen_tile.entrance == dir.SOUTH:
                 return True
-        if self.get_current_tile().entrance == Dir.SOUTH:
-            if self.chosen_tile.entrance == Dir.NORTH:
+        if self.get_current_tile().entrance == dir.SOUTH:
+            if self.chosen_tile.entrance == dir.NORTH:
                 return True
-        if self.get_current_tile().entrance == Dir.WEST:
-            if self.chosen_tile.entrance == Dir.EAST:
+        if self.get_current_tile().entrance == dir.WEST:
+            if self.chosen_tile.entrance == dir.EAST:
                 return True
-        if self.get_current_tile().entrance == Dir.EAST:
-            if self.chosen_tile.entrance == Dir.WEST:
+        if self.get_current_tile().entrance == dir.EAST:
+            if self.chosen_tile.entrance == dir.WEST:
                 return True
         return print(" Dining room and Patio entrances dont align")
 
     def check_dining_room_has_exit(self):
         tile = self.chosen_tile
         if tile.name == "Dining Room":
-            if self.current_move_direction == Dir.NORTH and tile.entrance == Dir.SOUTH:
+            if self.current_move_direction == dir.NORTH and tile.entrance == dir.SOUTH:
                 return False
-            if self.current_move_direction == Dir.SOUTH and tile.entrance == Dir.NORTH:
+            if self.current_move_direction == dir.SOUTH and tile.entrance == dir.NORTH:
                 return False
-            if self.current_move_direction == Dir.EAST and tile.entrance == Dir.WEST:
+            if self.current_move_direction == dir.EAST and tile.entrance == dir.WEST:
                 return False
-            if self.current_move_direction == Dir.WEST and tile.entrance == Dir.EAST:
+            if self.current_move_direction == dir.WEST and tile.entrance == dir.EAST:
                 return False
         else:
             return True
@@ -493,13 +508,13 @@ class Game:
     def resolve_doors(n, e, s, w):
         doors = []
         if n == 1:
-            doors.append(Dir.NORTH)
+            doors.append(dir.NORTH)
         if e == 1:
-            doors.append(Dir.EAST)
+            doors.append(dir.EAST)
         if s == 1:
-            doors.append(Dir.SOUTH)
+            doors.append(dir.SOUTH)
         if w == 1:
-            doors.append(Dir.WEST)
+            doors.append(dir.WEST)
         return doors
 
     def lose_game(self):
@@ -629,29 +644,29 @@ class Tile:
         self.entrance = direction
 
     def rotate_entrance(self):
-        if self.entrance == Dir.NORTH:
-            self.set_entrance(Dir.EAST)
+        if self.entrance == dir.NORTH:
+            self.set_entrance(dir.EAST)
             return
-        if self.entrance == Dir.SOUTH:
-            self.set_entrance(Dir.WEST)
+        if self.entrance == dir.SOUTH:
+            self.set_entrance(dir.WEST)
             return
-        if self.entrance == Dir.EAST:
-            self.set_entrance(Dir.SOUTH)
+        if self.entrance == dir.EAST:
+            self.set_entrance(dir.SOUTH)
             return
-        if self.entrance == Dir.WEST:
-            self.set_entrance(Dir.NORTH)
+        if self.entrance == dir.WEST:
+            self.set_entrance(dir.NORTH)
             return
 
     def rotate_tile(self):  # Will rotate the tile 1 position clockwise
         for door in self.doors:
-            if door == Dir.NORTH:
-                self.change_door_position(self.doors.index(door), Dir.EAST)
-            if door == Dir.EAST:
-                self.change_door_position(self.doors.index(door), Dir.SOUTH)
-            if door == Dir.SOUTH:
-                self.change_door_position(self.doors.index(door), Dir.WEST)
-            if door == Dir.WEST:
-                self.change_door_position(self.doors.index(door), Dir.NORTH)
+            if door == dir.NORTH:
+                self.change_door_position(self.doors.index(door), dir.EAST)
+            if door == dir.EAST:
+                self.change_door_position(self.doors.index(door), dir.SOUTH)
+            if door == dir.SOUTH:
+                self.change_door_position(self.doors.index(door), dir.WEST)
+            if door == dir.WEST:
+                self.change_door_position(self.doors.index(door), dir.NORTH)
 
 
 class IndoorTile(Tile):
@@ -678,6 +693,25 @@ class OutdoorTile(Tile):
                f' {self.x}, {self.y}, {self.effect} \n'
 
 
+# Possibly working system idk lmao
+# class HealthGraph():
+#     data = [
+#         [Player.get_health, Player.add_turn] # Actually this will break here lmao
+#     ]
+#
+#     def csv_writer(self, data):
+#         with open('..\David+Jared\CSV\player_health.csv', 'w', encoding='UTF8', newline='') as f:
+#             writer = csv.writer(f)
+#             writer.writerows(data)
+#
+#     def graph_drawing(self):
+#         plt.rcParams["figure.figsize"] = [7, 3]
+#         plt.rcParams["figure.autolayout"] = True
+#         headers = ['Turn', 'Health']
+#         df = pd.read_csv('player_health.csv', names=headers)
+#         df.set_index('Turn').plot()
+#         plt.show()
+
 class Commands(cmd.Cmd):
     intro = 'Welcome to Zombie in My Pocket type "start" to start playing the game, if you need help at any time type ' \
             '"help" or "?". Good Luck '
@@ -696,41 +730,66 @@ class Commands(cmd.Cmd):
         else:
             print("You are currently playing a game type 'restart' if you want to start again")
 
+    # Add to help file
+    @staticmethod
+    def help_start():
+        print("Type 'start' while seeing the intro")
+
     # Move to a north tile
     def do_n(self, line):
         if self.game.state == "Moving":
-            self.game.select_move(Dir.NORTH)
+            self.game.select_move(dir.NORTH)
             self.game.get_game()
             self.game.get_player_status()
         else:
             print("You are not currently in Move state")
+
+    # Add to help file
+    @staticmethod
+    def help_n():
+        print("Type 'n' while in the moving state")
 
     # Move to a south tile
     def do_s(self, line):
         if self.game.state == "Moving":
-            self.game.select_move(Dir.SOUTH)
+            self.game.select_move(dir.SOUTH)
             self.game.get_game()
             self.game.get_player_status()
         else:
             print("You are not currently in Move state")
+
+    # Add to help file
+    @staticmethod
+    def help_s():
+        print("Type 's' while in the moving state")
 
     # Move to a east tile
     def do_e(self, line):
         if self.game.state == "Moving":
-            self.game.select_move(Dir.EAST)
+            self.game.select_move(dir.EAST)
             self.game.get_game()
             self.game.get_player_status()
         else:
             print("You are not currently in Move state")
 
+    # Add to help file
+    @staticmethod
+    def help_e():
+        print("Type 'e' while in the moving state")
+
     # Move to a west tile
     def do_w(self, line):
         if self.game.state == "Moving":
-            self.game.select_move(Dir.WEST)
+            self.game.select_move(dir.WEST)
             self.game.get_game()
             self.game.get_player_status()
         else:
             print("You are not currently in Move state")
+
+    # Add to help file
+    @staticmethod
+    def help_w():
+        print("Type 'w' while in the moving state")
 
     # Puts player in draw state so player draws a dev card
     def do_draw(self, line):
@@ -739,6 +798,11 @@ class Commands(cmd.Cmd):
         else:
             print("You are not in the drawing state")
 
+    # Add to help file
+    @staticmethod
+    def help_draw():
+        print("Type 'draw' while in the drawing state")
+
     # Puts the game into rotate state
     def do_rotate(self, line):
         if self.game.state == "Rotating":
@@ -746,6 +810,11 @@ class Commands(cmd.Cmd):
             self.game.get_game()
         else:
             print("You currently don't have a tile selected to rotate")
+
+    # Add to help file
+    @staticmethod
+    def help_rotate():
+        print("Type 'rotate' while in the rotating state, each time the tile will rotate 90 degrees")
 
     # Puts the game into place state
     def do_place(self, line):
@@ -769,24 +838,36 @@ class Commands(cmd.Cmd):
         else:
             print("You currently don't have a tile selected")
 
+    # Add to help file
+    @staticmethod
+    def help_place():
+        print(
+            "Type 'place' while in the rotating state, the doors of the new tile must line up with the direction you moved")
+
     # Select a direction to create a door if tile does not have any
     def do_choose(self, direction):
         dir_choice = ["n", "e", "s", "w"]
         if direction not in dir_choice:
             return print("Invalid input please type 'choose' and one of 'n', 'e', 's', 'w' ")
         if direction == 'n':
-            direction = Dir.NORTH
+            direction = dir.NORTH
         if direction == "e":
-            direction = Dir.EAST
+            direction = dir.EAST
         if direction == "s":
-            direction = Dir.SOUTH
+            direction = dir.SOUTH
         if direction == "w":
-            direction = Dir.WEST
+            direction = dir.WEST
         if self.game.state == "Choosing Door":
             self.game.can_cower = False
             self.game.choose_door(direction)
         else:
             print("Your cannot create a door in this room")
+
+    # Add to help file
+    @staticmethod
+    def help_choose():
+        print(
+            "Type 'choose' and one of 'n', 'e', 's', 'w' while in the Choosing Door state to create a new door in that direction")
 
     # Calculates players damage taken when attacking zombies
     def do_attack(self, line):
@@ -816,6 +897,12 @@ class Commands(cmd.Cmd):
         else:
             print("There is nothing to attack")
 
+    # Add to help file
+    @staticmethod
+    def help_attack():
+        print(
+            "Type 'attack' when faced with a group of zombies, the number of zombies minus your attack status will determine how much damage taken")
+
     # Lets players use items
     def do_use(self, line):
         item1 = ''
@@ -835,6 +922,12 @@ class Commands(cmd.Cmd):
         else:
             print("You cannot do that right now")
 
+    # Add to help file
+    @staticmethod
+    def help_use():
+        print(
+            "Type 'use' and the items name when attacking zombies, damage done will be increased and the damage taken will be reduced")
+
     # Lets players swap items
     def do_swap(self, line):
         if self.game.state == "Swapping Item":
@@ -843,17 +936,23 @@ class Commands(cmd.Cmd):
             self.game.room_item = None
             self.game.get_game()
 
+    # Add to help file
+    @staticmethod
+    def help_swap():
+        print(
+            "Type 'swap' and the name of the item you want to get rid of when you draw a new item when already carrying two items")
+
     # Lets players run from zombies
     def do_run(self, direction):
         if self.game.state == "Attacking":
             if direction == 'n':
-                self.game.trigger_run(Dir.NORTH)
+                self.game.trigger_run(dir.NORTH)
             elif direction == 'e':
-                self.game.trigger_run(Dir.EAST)
+                self.game.trigger_run(dir.EAST)
             elif direction == 's':
-                self.game.trigger_run(Dir.SOUTH)
+                self.game.trigger_run(dir.SOUTH)
             elif direction == 'w':
-                self.game.trigger_run(Dir.WEST)
+                self.game.trigger_run(dir.WEST)
             else:
                 print("Cannot run that direction")
             if len(self.game.get_current_tile().doors) == 1 and self.game.chosen_tile.name != "Foyer":
@@ -862,12 +961,23 @@ class Commands(cmd.Cmd):
         else:
             print("Cannot run when not being attacked")
 
+    # Add to help file
+    @staticmethod
+    def help_run():
+        print("Type 'run' when faced with a group of zombies, you will return to the room you entered from")
+
     # Lets players cower from zombies to avoid damage but at the cost of an increase to the time
     def do_cower(self, line):
         if self.game.state == "Moving":
             self.game.trigger_cower()
         else:
             print("You cannot cower if you are not being attacked")
+
+    # Add to help file
+    @staticmethod
+    def help_cower():
+        print(
+            "Type 'cower' when faced with a group of zombies, you will hide from the zombies and take not damage but the time of day will increase")
 
     # Lets players find the totem in the evil temple at the cost of a card
     def do_search(self, line):
@@ -876,6 +986,11 @@ class Commands(cmd.Cmd):
         else:
             print("You cannot search for the totem here")
 
+    # Add to help file
+    @staticmethod
+    def help_search():
+        print("Type 'search' when in the Evil Temple, the totem item will be found at the cost of a card")
+
     # Lets players bury the totem in the graveyard at the cost of a card
     def do_bury(self, line):
         if self.game.state == "Moving":
@@ -883,14 +998,30 @@ class Commands(cmd.Cmd):
         else:
             print("You cannot bury for the totem here")
 
+    # Add to help file
+    @staticmethod
+    def help_bury():
+        print("Type 'bury' when in the Graveyard, the totem item will be buried at the cost of a card")
+
     # Lets player exit the game
     def do_exit(self, line):
         return True
+
+    # Add to help file
+    @staticmethod
+    def help_exit():
+        print("Type 'exit' at any time, the game will close without being saved")
 
     # Lets player see characters status
     def do_status(self, line):
         if self.game.state != "Game Over":
             self.game.get_player_status()
+
+    # Add to help file
+    @staticmethod
+    def help_status():
+        print(
+            "Type 'status' at any time and you will be shown: the time of day, your health points, your attack points, the items you have and the games current state")
 
     # Not finished yet
     def do_drop(self, item):
@@ -898,12 +1029,22 @@ class Commands(cmd.Cmd):
             self.game.drop_item(item)
             self.game.get_game()
 
+    # Add to help file
+    @staticmethod
+    def help_drop():
+        print("Type 'drop' and the name of the item, that item will be thrown away")
+
     #  Restarts the game
     def do_restart(self, line):
         del self.game
         del self.player
         self.player = Player()
         self.game = Game(self.player)
+
+    # Add to help file
+    @staticmethod
+    def help_restart():
+        print("Type 'restart' at any time to start a new game")
 
     # save game working - Daniel
     def do_save(self, line):
@@ -918,6 +1059,11 @@ class Commands(cmd.Cmd):
         if not line:
             return print("Please enter a name for the saved game state")
 
+    # Add to help file
+    @staticmethod
+    def help_save():
+        print("Type 'save' and a name for the save file at any time e.g. 'save sg1', to save your current progress")
+
     # load game working - Daniel
     def do_load(self, save):
         try:
@@ -931,6 +1077,11 @@ class Commands(cmd.Cmd):
 
         if not save:
             return print("Please enter a valid name of a save")
+
+    # Add to help file
+    @staticmethod
+    def help_load():
+        print("Type 'load' and the name of a saved file at any time e.g. 'load sg1', to load your past progress")
 
 
 if __name__ == "__main__":
