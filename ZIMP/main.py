@@ -746,6 +746,7 @@ class Commands(cmd.Cmd):
         if self.game.state == "Moving":
             self.game.select_move(Dir.NORTH)
             self.game.get_game()
+            self.game.get_player_status()
         else:
             print("Player not ready to move")
 
@@ -754,6 +755,7 @@ class Commands(cmd.Cmd):
         if self.game.state == "Moving":
             self.game.select_move(Dir.SOUTH)
             self.game.get_game()
+            self.game.get_player_status()
         else:
             print("Player not ready to move")
 
@@ -762,6 +764,7 @@ class Commands(cmd.Cmd):
         if self.game.state == "Moving":
             self.game.select_move(Dir.EAST)
             self.game.get_game()
+            self.game.get_player_status()
         else:
             print("Player not ready to move")
 
@@ -770,6 +773,7 @@ class Commands(cmd.Cmd):
         if self.game.state == "Moving":
             self.game.select_move(Dir.WEST)
             self.game.get_game()
+            self.game.get_player_status()
         else:
             print("Player not ready to move")
 
@@ -909,23 +913,25 @@ class Commands(cmd.Cmd):
         if self.game.state != "Game Over":
             self.game.get_player_status()
 
-# Attempt at save game
-    def save_game(self, line):
-        if len(self.game.tiles) == 0:
-            return print("Please start the game before saving")
-        else:
-            save = line + '.pickle'
-        with open(save, 'SG') as sg:
+    # save game working - Daniel
+    def do_save(self, line):
+        save_file = line + '.pickle'
+        with open(save_file, 'wb') as sg:
             pickle.dump(self.game, sg)
+            print("Game Saved")
+
+        if len(self.game.tiles) == 0:
+            return print("Please place a tile before saving")
 
         if not line:
             return print("Please enter a name for the saved game state")
 
-# Attempt at load game
-    def load_game(self, save):
-        load = save + '.pickle'
+    # load game working - Daniel
+    def do_load(self, save):
         try:
-            with open(load, 'LG') as lg:
+            load = save + '.pickle'
+            print("Game Loaded")
+            with open(load, 'rb') as lg:
                 self.game = pickle.load(lg)
                 self.game.get_game()
         except FileNotFoundError:
