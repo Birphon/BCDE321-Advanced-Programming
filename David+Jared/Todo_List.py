@@ -21,11 +21,8 @@
     # idk what this one would be
 # Todo: Validate Data
     # idk what this one would be
-# Todo: Provides Object-persistence/ Object Serialization using either pickle or shelves
-    # Written code for this but don't know how to test have to ask Alec - Daniel
-# Todo: Can load data from a file
-    # I assume this is just loading a saved game
-    # Written code for this but don't know how to test have to ask Alec - Daniel
+# Todo: Provides Object-persistence/ Object Serialization using either pickle or shelves DONE - Daniel
+# Todo: Can load data from a file DONE - Daniel
 # Todo: Can deal with a directory
     # We can make this Load a game form a "Saves" Folder
 # Todo: Can raise exceptions and provide exception handling DONE (but may want to update to make different from Alec and Cameron's code)
