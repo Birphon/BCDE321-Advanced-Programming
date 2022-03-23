@@ -1,0 +1,296 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Game
+class Player
+class DevCard
+class Tile
+abstract class IndoorTile
+class Commands
+
+
+class Game {
+        player: string
+        time: time
+        indoor_tiles: array
+        outdoor_tiles: array
+        dev_cards: array
+        game_map: array
+        chosen_tile: array
+        state: state
+        current_move_direction: direction
+        current_zombies: int
+        can_cower: boolean
+        room_item: boolean
+
+    def start_game():
+
+    def get_game():
+
+    def get_player_status():
+
+    def get_time():
+
+    def load_tiles():
+
+    def draw_tile(:
+
+    def load_dev_cards():
+
+    def move_player():
+
+    def select_move():
+
+    def check_indoor_outdoor_move()
+
+    def get_destination_coords():
+
+    def check_for_door():
+
+    def check_for_room():
+
+    def check_doors_align():
+
+    def check_entrances_align():
+
+    def check_dining_room_has_exit():
+
+    def place_tile():
+
+    def get_current_tile():
+
+    def rotate():
+
+    def trigger_dev_card():
+
+    def trigger_attack():
+
+    def trigger_run():
+
+    def trigger_room_effect():
+
+    def trigger_cower():
+
+    def drop_item():
+
+    def use_item():
+
+    def choose_door():
+
+    def search_for_totem():
+
+    def bury_totem():
+
+    def check_for_dead_player():
+
+    def resolve_doors():
+
+    def lose_game():
+        }
+
+
+class Player {
+        attack: int
+        health: int
+        x: int
+        y: int
+        items: array
+        has_totem: boolean
+
+
+     def get_health()
+
+    def found_totem()
+
+    def get_attack()
+
+    def set_attack()
+
+    def set_health()
+
+    def add_health()
+
+    def add_attack()
+
+    def get_items()
+
+    def get_item_charges()
+
+
+    def set_item_charges()
+
+    def use_item_charge()
+
+    def add_item()
+
+    def remove_item()
+
+    def set_x()
+
+    def set_y()
+
+    def get_x()
+
+    def get_y()
+
+        }
+
+class DevCard {
+        item: string
+        charges: int
+        event_one: string
+        event_two: string
+        event_three: string
+
+    def get_event_at_time()
+
+    def get_item()
+
+    def get_charges()
+
+    def __str__()
+
+
+        }
+
+class Tile {
+        name: string
+        x: int
+        y: int
+        effect: string
+        doors: int
+        entrance: int
+
+    def set_x()
+
+    def set_y()
+
+    def change_door_position()
+
+    def set_entrance()
+
+    def rotate_entrance()
+
+     def rotate_tile()
+
+        }
+
+abstract IndoorTile {
+        name: string
+        x: int
+        y: int
+        effect: string
+        doors: int
+        entrance: int
+
+    }
+
+abstract OutdoorTile {
+        name: string
+        x: int
+        y: int
+        effect: string
+        doors: int
+        entrance: int
+
+    }
+
+class Commands {
+
+    def do_start(self, line):
+
+    def help_start():
+
+    def do_n(self, line):
+
+    def help_n():
+
+    def do_s(self, line):
+
+    def help_s():
+
+    def do_e(self, line):
+
+    def help_e():
+
+    def do_w(self, line):
+
+    def help_w():
+
+    def do_draw(self, line):
+
+    def help_draw():
+
+    def do_rotate(self, line):
+
+    def help_rotate():
+
+    def do_place(self, line):
+
+    def help_place():
+
+    def do_choose(self, direction):
+
+    def help_choose():
+
+    def do_attack(self, line):
+
+    def help_attack():
+
+    def do_use(self, line):
+
+    def help_use():
+
+    def do_swap(self, line):
+
+    def help_swap():
+
+    def do_run(self, direction):
+
+    def help_run():
+
+    def do_cower(self, line):
+
+    def help_cower():
+
+    def do_search(self, line):
+
+    def help_search():
+
+    def do_bury(self, line):
+
+    def help_bury():
+
+    def do_exit(self, line):
+
+    def help_exit():
+
+    def do_status(self, line):
+
+    def help_status():
+
+    def do_drop(self, item):
+
+    def help_drop():
+
+    def do_restart(self, line):
+
+    def help_restart():
+
+    def do_save(self, line):
+
+    def help_save():
+
+    def do_load(self, save):
+
+    def help_load():
+
+        }
+
+Game <|-- Player
+Game <|-- DevCard
+Game <|-- Tile
+Tile <|-- IndoorTile
+Tile <|-- OutdoorTile
+Commands <|-- Game
+@enduml

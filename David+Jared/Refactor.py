@@ -55,8 +55,6 @@ class Game:
                 self.state = "Rotating"
                 break
 
-    """Type the 'start' command when the game is in starting state"""
-
     def get_game(self):
         s = ''
         f = ''

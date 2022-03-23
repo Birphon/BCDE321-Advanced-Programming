@@ -55,8 +55,6 @@ class Game:
                 self.state = "Rotating"
                 break
 
-    """Type the 'start' command when the game is in starting state"""
-
     def get_game(self):
         s = ''
         f = ''
@@ -714,7 +712,7 @@ class OutdoorTile(Tile):
 
 class Commands(cmd.Cmd):
     intro = 'Welcome to Zombie in My Pocket type "start" to start playing the game, if you need help at any time type ' \
-            '"help" or "?". Good Luck '
+            '"help" Good Luck '
 
     def __init__(self):
         cmd.Cmd.__init__(self)
