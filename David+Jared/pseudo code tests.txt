@@ -1,0 +1,27 @@
+#1 Can start game
+#2 Can restart game
+#3 Can use help command
+#4 Can use commands within help
+    i.e. help rules
+#5 Can move forward
+#6 Can move right
+#7 Can move down
+#8 Can move left
+#9 Can draw tile
+#10 Can place tile
+#11 Can draw development card
+#12 Can get items
+#13 Can drop items
+#14 Can combine items
+#15 Can run
+#16 Can cower
+#17 Can fight
+#19 Can use items
+#20 Can lose Health
+#21 Can pickup Totem
+#22 Can bury Totem (win)
+#23 Can lose game
+#24 Can have zombies spawn
+#25 Can show previous turns
+#26 Has a working Graph
+#27
