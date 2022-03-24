@@ -1,0 +1,72 @@
+help_start():
+        print("Type 'start' while seeing the intro")
+
+help_n():
+        print("Type 'n' while in the moving state")
+
+help_s():
+        print("Type 's' while in the moving state")
+
+help_e():
+        print("Type 'e' while in the moving state")
+
+help_w():
+        print("Type 'w' while in the moving state")
+
+help_draw():
+        print("Type 'draw' while in the drawing state")
+
+help_rotate():
+        print("Type 'rotate' while in the rotating state, each time the tile will rotate 90 degrees")
+
+help_place():
+        print(
+            "Type 'place' while in the rotating state, the doors of the new tile must line up with the direction you moved")
+
+help_choose():
+        print(
+            "Type 'choose' and one of 'n', 'e', 's', 'w' while in the Choosing Door state to create a new door in that direction")
+
+help_attack():
+        print(
+            "Type 'attack' when faced with a group of zombies, the number of zombies minus your attack status will determine how much damage taken")
+
+help_use():
+        print(
+            "Type 'use' and the items name when attacking zombies, damage done will be increased and the damage taken will be reduced")
+
+help_swap():
+        print(
+            "Type 'swap' and the name of the item you want to get rid of when you draw a new item when already carrying two items")
+
+help_run():
+        print("Type 'run' when faced with a group of zombies, you will return to the room you entered from")
+
+help_cower():
+        print(
+            "Type 'cower' when faced with a group of zombies, you will hide from the zombies and take not damage but the time of day will increase")
+
+help_search():
+        print("Type 'search' when in the Evil Temple, the totem item will be found at the cost of a card")
+
+help_bury():
+        print("Type 'bury' when in the Graveyard, the totem item will be buried at the cost of a card")
+
+help_exit():
+        print("Type 'exit' at any time, the game will close without being saved")
+
+help_status():
+        print(
+            "Type 'status' at any time and you will be shown: the time of day, your health points, your attack points, the items you have and the games current state")
+
+help_drop():
+        print("Type 'drop' and the name of the item, that item will be thrown away")
+
+help_restart():
+        print("Type 'restart' at any time to start a new game")
+
+help_save():
+        print("Type 'save' and a name for the save file at any time e.g. 'save sg1', to save your current progress")
+
+help_load():
+        print("Type 'load' and the name of a saved file at any time e.g. 'load sg1', to load your past progress")
