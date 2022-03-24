@@ -20,8 +20,9 @@ import pickle
 
 
 class Game:
-    def __init__(self, player, time=9, game_map, indoor_tiles, outdoor_tiles, chosen_tile,
-                 dev_cards, state="Starting", current_move_direction, can_cower=True):
+    def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
+                 dev_cards=None, state="Starting", current_move_direction=None,
+                 can_cower=True):  # Added default arguments - Daniel
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
@@ -171,7 +172,7 @@ class Game:
         if current_type != move_type and self.get_current_tile().name != "Patio" or "Dining Room":
             return False
 
-    def get_destination_coords(self, direction):  # Gets the x and y value of the proposed move
+    def get_destination_coords(self, direction):
         if direction == dir.NORTH:
             return self.player.get_x(), self.player.get_y() - 1
         if direction == dir.SOUTH:
@@ -181,13 +182,13 @@ class Game:
         if direction == dir.WEST:
             return self.player.get_x() - 1, self.player.get_y()
 
-    def check_for_door(self, direction):  # Takes a direction and checks if the current room has a door there
+    def check_for_door(self, direction):
         if direction in self.get_current_tile().doors:
             return True
         else:
             return False
 
-    def check_for_room(self, x, y):  # Takes a move direction and checks if there is a room there
+    def check_for_room(self, x, y):
         if (x, y) not in self.tiles:
             return False
         else:
@@ -249,7 +250,7 @@ class Game:
         elif tile.type == "Indoor":
             self.indoor_tiles.pop(self.indoor_tiles.index(tile))
 
-    def get_current_tile(self):  # returns the current tile that the player is at
+    def get_current_tile(self):
         return self.tiles[self.player.get_x(), self.player.get_y()]
 
     def rotate(self):
@@ -260,7 +261,6 @@ class Game:
         if self.get_current_tile().name == "Dining Room" or "Patio":
             tile.rotate_entrance()
 
-    # Call when player enters a room and draws a dev card
     def trigger_dev_card(self, time):
         if len(self.dev_cards) == 0:
             if self.get_time == 11:
@@ -274,7 +274,7 @@ class Game:
 
         dev_card = self.dev_cards[0]
         self.dev_cards.pop(0)
-        event = dev_card.get_event_at_time(time)  # Gets the event at the current time
+        event = dev_card.get_event_at_time(time)
         if event[0] == "Nothing":
             print("There is nothing in this room")
             if len(self.chosen_tile.doors) == 1 and self.chosen_tile.name != "Foyer":
@@ -285,7 +285,7 @@ class Game:
                 self.state = "Moving"
                 self.get_game()
             return
-        elif event[0] == "Health":  # Change health of player
+        elif event[0] == "Health":
             print("There might be something in this room")
             self.player.add_health(event[1])
 
@@ -307,7 +307,7 @@ class Game:
             else:
                 self.state = "Moving"
                 self.get_game()
-        elif event[0] == "Item":  # Add item to player's inventory if there is room
+        elif event[0] == "Item":
             if len(self.dev_cards) == 0:
                 if self.get_time == 11:
                     print("You have run out of time")
@@ -334,18 +334,17 @@ class Game:
                 response = input("You already have two items, do you want to drop one of them? (Y/N) ")
                 if response == "Y" or response == "y":
                     self.state = "Swapping Item"
-                else:  # If player doesn't want to drop item, just move on
+                else:
                     self.state = "Moving"
                     self.room_item = None
                     self.get_game()
             if self.get_current_tile().name == "Garden" or "Kitchen":
                 self.trigger_room_effect(self.get_current_tile().name)
-        elif event[0] == "Zombies":  # Add zombies to the game, begin combat
+        elif event[0] == "Zombies":
             print(f"There are {event[1]} zombies in this room, prepare to fight!")
             self.current_zombies = int(event[1])
-            self.state = "Attacking"  # Create CMD for attacking zombies
+            self.state = "Attacking"
 
-    # Call in CMD if state is attacking, *items is a list of items the player is going to use
     def trigger_attack(self, *item):
         player_attack = self.player.get_attack()
         zombies = self.current_zombies
@@ -392,7 +391,6 @@ class Game:
                 print("You cannot use this item right now, try again")
                 return
 
-        # Calculate damage on the player
         damage = zombies - player_attack
         if damage < 0:
             damage = 0
@@ -408,7 +406,6 @@ class Game:
                 self.trigger_room_effect(self.get_current_tile().name)
             self.state = "Moving"
 
-    # DO MOVEMENT INTO ROOM, Call if state is attacking and player wants to run away
     def trigger_run(self, direction, health_lost=-1):
         self.state = "Running"
         self.select_move(direction)
@@ -421,7 +418,7 @@ class Game:
         else:
             self.state = "Attacking"
 
-    def trigger_room_effect(self, room_name):  # Used for the Garden and Kitchen special room effects
+    def trigger_room_effect(self, room_name):
         if room_name == "Garden":
             self.player.add_health(1)
             print(f"After ending your turn in the {room_name} you have gained one health")
@@ -431,7 +428,6 @@ class Game:
             print(f"After ending your turn in the {room_name} you have gained one health")
             self.state = "Moving"
 
-    # If player chooses to cower instead of move to a new room
     def trigger_cower(self):
         if self.can_cower:
             self.player.add_health(3)
@@ -441,7 +437,6 @@ class Game:
         else:
             return print("Cannot cower during a zombie door attack")
 
-    # Call when player wants to drop an item, and state is dropping item
     def drop_item(self, old_item):
         for item in self.player.get_items():
             if item[0] == old_item:
@@ -464,7 +459,7 @@ class Game:
             print("These items cannot be used right now")
             return
 
-    def choose_door(self, direction):  # used to select where a door will be made during a zombie door attack
+    def choose_door(self, direction):
         if direction in self.chosen_tile.doors:
             print("Choose a NEW door not an existing one")
             return False
@@ -475,7 +470,7 @@ class Game:
                   f" fight or the run command to flee")
             self.state = "Attacking"
 
-    def search_for_totem(self):  # Used to search for a totem in the evil temple, will force the user to draw a dev card
+    def search_for_totem(self):
         if self.get_current_tile().name == "Evil Temple":
             if self.player.has_totem:
                 print("player already has the totem")
@@ -520,12 +515,12 @@ class Game:
 
 
 class Player:
-    def __init__(self, attack=1, health=6, x=16, y=16, has_totem=False):
+    def __init__(self, attack=1, health=6, x=16, y=16, has_totem=False):  # Added default arguments - Daniel
         self.attack = attack
         self.health = health
-        self.x = x  # x Will represent the players position horizontally starts at 16
-        self.y = y  # y will represent the players position vertically starts at 16
-        self.items = []  # Holds the players items. Can hold 2 items at a time
+        self.x = x
+        self.y = y
+        self.items = []
         self.has_totem = has_totem
 
     def get_health(self):
@@ -587,7 +582,6 @@ class Player:
         return self.y
 
 
-# Development cards for the game. Played when the player moves into the room.
 class DevCard:
     def __init__(self, item, charges, event_one, event_two, event_three):
         self.item = item
@@ -619,12 +613,12 @@ class DevCard:
 
 
 class Tile:
-    def __init__(self, name, x=16, y=16, effect, doors, entrance):
+    def __init__(self, name, x=16, y=16, effect=None, doors=None, entrance=None):  # Added default arguments - Daniel
         if doors is None:
             doors = []
         self.name = name
-        self.x = x  # x will represent the tiles position horizontally
-        self.y = y  # y will represent the tiles position vertically
+        self.x = x
+        self.y = y
         self.effect = effect
         self.doors = doors
         self.entrance = entrance
@@ -655,7 +649,7 @@ class Tile:
             self.set_entrance(dir.NORTH)
             return
 
-    def rotate_tile(self):  # Will rotate the tile 1 position clockwise
+    def rotate_tile(self):
         for door in self.doors:
             if door == dir.NORTH:
                 self.change_door_position(self.doors.index(door), dir.EAST)
@@ -668,7 +662,7 @@ class Tile:
 
 
 class IndoorTile(Tile):
-    def __init__(self, name, effect, doors, x=16, y=16, entrance):
+    def __init__(self, name, effect=None, doors=None, x=16, y=16, entrance=None):
         if doors is None:
             doors = []
         self.type = "Indoor"
@@ -680,7 +674,7 @@ class IndoorTile(Tile):
 
 
 class OutdoorTile(Tile):
-    def __init__(self, name, effect, doors, x=16, y=16, entrance):
+    def __init__(self, name, effect=None, doors=None, x=16, y=16, entrance=None):
         if doors is None:
             doors = []
         self.type = "Outdoor"
