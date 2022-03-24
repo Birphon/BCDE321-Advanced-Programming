@@ -57,21 +57,25 @@ class Game:
                 break
 
     def get_game(self):
-        s = ''
-        f = ''
-        if self.state == "Moving":
-            s = "In this state you can move by typing 'n, e, s, w' "
-        if self.state == "Rotating":
-            s = "Type 'rotate' until the door of the current tile are aligned with the new tile" \
-                " Once you are happy with the door position you can place the tile by typing 'place' "
-        if self.state == "Choosing Door":
-            s = "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
-        if self.state == "Drawing Dev Card":
-            s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing depending on the time"
-        for door in self.chosen_tile.doors:
-            f += door.name + ', '
-        return print(f' Your current tile is {self.chosen_tile.name}, the available doors in this room are {f}\n '
-                     f'The state is {self.state}. {s} \n Special Entrances : {self.chosen_tile.entrance}')
+        try:
+            s = ''
+            f = ''
+            if self.state == "Moving":
+                s = "In this state you can move by typing 'n, e, s, w' "
+            if self.state == "Rotating":
+                s = "Type 'rotate' until the door of the current tile are aligned with the new tile" \
+                    " Once you are happy with the door position you can place the tile by typing 'place' "
+            if self.state == "Choosing Door":
+                s = "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
+            if self.state == "Drawing Dev Card":
+                s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing depending on the time"
+            for door in self.chosen_tile.doors:
+                f += door.name + ', '
+            return print(f' Your current tile is {self.chosen_tile.name}, the available doors in this room are {f}\n '
+                         f'The state is {self.state}. {s} \n Special Entrances : {self.chosen_tile.entrance}')
+
+        except AttributeError as e:
+            print("ERROR: Unable to find door attribute", e)
 
     def get_player_status(self):
         return print(f'It is {self.get_time()} pm \n'
@@ -83,24 +87,30 @@ class Game:
     def get_time(self):
         return self.time
 
-    # Loads tiles from excel file
+    # Load tiles from the Excel file, added error checking - Daniel
     def load_tiles(self):
-        excel_data = pd.read_excel('Tiles.xlsx')
-        tiles = []
-        for name in excel_data.iterrows():
-            tiles.append(name[1].tolist())
-        for tile in tiles:
-            doors = self.resolve_doors(tile[3], tile[4], tile[5], tile[6])
-            if tile[2] == "Outdoor":
-                new_tile = OutdoorTile(tile[0], tile[1], doors)
-                if tile[0] == "Patio":
-                    new_tile.set_entrance(dir.NORTH)
-                self.outdoor_tiles.append(new_tile)
-            if tile[2] == "Indoor":
-                new_tile = IndoorTile(tile[0], tile[1], doors)
-                if tile[0] == "Dining Room":
-                    new_tile.set_entrance(dir.NORTH)
-                self.indoor_tiles.append(new_tile)
+        try:
+            excel_data = pd.read_excel('Tiles.xlsx')
+            tiles = []
+            for name in excel_data.iterrows():
+                tiles.append(name[1].tolist())
+            for tile in tiles:
+                doors = self.resolve_doors(tile[3], tile[4], tile[5], tile[6])
+                if tile[2] == "Outdoor":
+                    new_tile = OutdoorTile(tile[0], tile[1], doors)
+                    if tile[0] == "Patio":
+                        new_tile.set_entrance(dir.NORTH)
+                    self.outdoor_tiles.append(new_tile)
+                if tile[2] == "Indoor":
+                    new_tile = IndoorTile(tile[0], tile[1], doors)
+                    if tile[0] == "Dining Room":
+                        new_tile.set_entrance(dir.NORTH)
+                    self.indoor_tiles.append(new_tile)
+
+        except FileNotFoundError as e:
+            print("ERROR: File not found please check Excel file name", e)
+        except OSError as e:
+            print("ERROR: Unable to access file please check file location", e)
 
     def draw_tile(self, x, y):
         if self.get_current_tile().type == "Indoor":
@@ -126,20 +136,26 @@ class Game:
             tile.set_y(y)
             self.chosen_tile = tile
 
-    # Loads development cards from excel file
+    # Load cards from Excel file, added error checking - Daniel
     def load_dev_cards(self):
-        card_data = pd.read_excel('DevCards.xlsx')
-        for card in card_data.iterrows():
-            item = card[1][0]
-            event_one = (card[1][1], card[1][2])
-            event_two = (card[1][3], card[1][4])
-            event_three = (card[1][5], card[1][6])
-            charges = card[1][7]
-            dev_card = DevCard(item, charges, event_one, event_two, event_three)
-            self.dev_cards.append(dev_card)
-        random.shuffle(self.dev_cards)
-        self.dev_cards.pop(0)
-        self.dev_cards.pop(0)
+        try:
+            card_data = pd.read_excel('DevCards.xlsx')
+            for card in card_data.iterrows():
+                item = card[1][0]
+                event_one = (card[1][1], card[1][2])
+                event_two = (card[1][3], card[1][4])
+                event_three = (card[1][5], card[1][6])
+                charges = card[1][7]
+                dev_card = DevCard(item, charges, event_one, event_two, event_three)
+                self.dev_cards.append(dev_card)
+            random.shuffle(self.dev_cards)
+            self.dev_cards.pop(0)
+            self.dev_cards.pop(0)
+
+        except FileNotFoundError as e:
+            print("ERROR: File not found please check Excel file name", e)
+        except OSError as e:
+            print("ERROR: Unable to access file please check file location", e)
 
     def move_player(self, x, y):
         self.player.set_y(y)
