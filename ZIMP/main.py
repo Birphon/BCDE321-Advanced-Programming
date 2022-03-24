@@ -20,8 +20,8 @@ import pickle
 
 
 class Game:
-    def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
-                 dev_cards=None, state="Starting", current_move_direction=None, can_cower=True):
+    def __init__(self, player, time=9, game_map, indoor_tiles, outdoor_tiles, chosen_tile,
+                 dev_cards, state="Starting", current_move_direction, can_cower=True):
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
@@ -83,7 +83,7 @@ class Game:
         return self.time
 
     # Loads tiles from excel file
-    def load_tiles(self):  # Needs Error handling in this method
+    def load_tiles(self):
         excel_data = pd.read_excel('Tiles.xlsx')
         tiles = []
         for name in excel_data.iterrows():
@@ -619,7 +619,7 @@ class DevCard:
 
 
 class Tile:
-    def __init__(self, name, x=16, y=16, effect=None, doors=None, entrance=None):
+    def __init__(self, name, x=16, y=16, effect, doors, entrance):
         if doors is None:
             doors = []
         self.name = name
@@ -668,7 +668,7 @@ class Tile:
 
 
 class IndoorTile(Tile):
-    def __init__(self, name, effect=None, doors=None, x=16, y=16, entrance=None):
+    def __init__(self, name, effect, doors, x=16, y=16, entrance):
         if doors is None:
             doors = []
         self.type = "Indoor"
@@ -680,7 +680,7 @@ class IndoorTile(Tile):
 
 
 class OutdoorTile(Tile):
-    def __init__(self, name, effect=None, doors=None, x=16, y=16, entrance=None):
+    def __init__(self, name, effect, doors, x=16, y=16, entrance):
         if doors is None:
             doors = []
         self.type = "Outdoor"
