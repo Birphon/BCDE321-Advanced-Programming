@@ -744,7 +744,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are currently playing a game type 'restart' if you want to start again")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -761,7 +761,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are not currently in Move state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -778,7 +778,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are not currently in Move state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -795,7 +795,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are not currently in Move state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -812,7 +812,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are not currently in Move state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -827,7 +827,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You are not in the drawing state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -843,7 +843,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You currently don't have a tile selected to rotate")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -873,7 +873,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You currently don't have a tile selected")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -901,7 +901,7 @@ class Commands(cmd.Cmd):
             else:
                 print("Your cannot create a door in this room")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -938,7 +938,7 @@ class Commands(cmd.Cmd):
             else:
                 print("There is nothing to attack")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -966,7 +966,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You cannot do that right now")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -983,7 +983,7 @@ class Commands(cmd.Cmd):
                 self.game.room_item = None
                 self.game.get_game()
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1011,7 +1011,7 @@ class Commands(cmd.Cmd):
             else:
                 print("Cannot run when not being attacked")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1026,7 +1026,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You cannot cower if you are not being attacked")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1042,7 +1042,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You cannot search for the totem here")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1057,7 +1057,7 @@ class Commands(cmd.Cmd):
             else:
                 print("You cannot bury for the totem here")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1070,7 +1070,7 @@ class Commands(cmd.Cmd):
             return True
 
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1084,7 +1084,7 @@ class Commands(cmd.Cmd):
             if self.game.state != "Game Over":
                 self.game.get_player_status()
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1092,14 +1092,13 @@ class Commands(cmd.Cmd):
         print(
             "Type 'status' at any time and you will be shown: the time of day, your health points, your attack points, the items you have and the games current state")
 
-    # Not finished yet
     def do_drop(self, item):
         try:
             if self.game.state != "Game Over":
                 self.game.drop_item(item)
                 self.game.get_game()
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1114,7 +1113,7 @@ class Commands(cmd.Cmd):
             self.player = Player()
             self.game = Game(self.player)
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1135,7 +1134,7 @@ class Commands(cmd.Cmd):
             if not line:
                 return print("Please enter a name for the saved game state")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
     # Add to help file - Daniel
     @staticmethod
@@ -1153,7 +1152,7 @@ class Commands(cmd.Cmd):
         except FileNotFoundError:
             print("File not found please check name of save")
         except SyntaxError:
-            print(Commands.default())
+            print(Commands.default)
 
         if not save:
             return print("Please enter a valid name of a save")
