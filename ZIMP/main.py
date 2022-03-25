@@ -22,7 +22,7 @@ import pickle
 class Game:
     def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
                  dev_cards=None, state="Starting", current_move_direction=None,
-                 can_cower=True):  # Added default arguments - Daniel
+                 can_cower=True):
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
@@ -364,7 +364,7 @@ class Game:
     def trigger_attack(self, *item):
         player_attack = self.player.get_attack()
         zombies = self.current_zombies
-        if len(item) == 2:  # If the player is using two items
+        if len(item) == 2:
             if "Oil" in item and "Candle" in item:
                 print("You used the oil and the candle to attack the zombies, it kills all of them")
                 self.drop_item("Oil")
@@ -497,7 +497,7 @@ class Game:
         else:
             print("You cannot search for a totem in this room")
 
-    def bury_totem(self):  #
+    def bury_totem(self):
         if self.get_current_tile().name == "Graveyard":
             if self.player.has_totem:
                 self.trigger_dev_card(self.time)
@@ -531,7 +531,7 @@ class Game:
 
 
 class Player:
-    def __init__(self, attack=1, health=6, x=16, y=16, has_totem=False):  # Added default arguments - Daniel
+    def __init__(self, attack=1, health=6, x=16, y=16, has_totem=False):
         self.attack = attack
         self.health = health
         self.x = x
