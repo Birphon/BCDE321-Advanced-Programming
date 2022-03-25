@@ -13,7 +13,7 @@
 # Todo: Tile rotation (on new version)
 # Todo: Tile placement (on new version)
 # ----- Assignment Requirements -----
-# Todo: Support CLI args
+# Todo: Support CLI args DONE - Daniel
 # Todo: Has line oriented interactive command interpreter based on cmd or similar package DONE - Daniel
 # Todo: Display command line help of available commands DONE - Daniel
 # Todo: Change commands and options
@@ -27,7 +27,7 @@
     # We can make this Load a game form a "Saves" Folder
 # Todo: Can raise exceptions and provide exception handling DONE - Daniel
 # Todo: Amount of checking for pre- and post- conditions of methods Working on - Daniel
-# Todo: Provide doctests Working on - Daniel
+# Todo: Provide doctests Done - Daniel
     # Pain
 # Todo: Provide Unittests Working on - Daniel
     # Pain

@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import json
 #  Save and load Game
 import pickle
+import sys
 
 
 class Game:
@@ -66,7 +67,8 @@ class Game:
                 s = "Type 'rotate' until the door of the current tile are aligned with the new tile" \
                     " Once you are happy with the door position you can place the tile by typing 'place' "
             if self.state == "Choosing Door":
-                s = "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
+                s = "There are no doors you can go through in this room, you will have to make your-own" \
+                    "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
             if self.state == "Drawing Dev Card":
                 s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing depending on the time"
             for door in self.chosen_tile.doors:
@@ -1163,5 +1165,9 @@ class Commands(cmd.Cmd):
         print("Type 'load' and the name of a saved file at any time e.g. 'load sg1', to load your past progress")
 
 
+# Added command-line arguments - Daniel
 if __name__ == "__main__":
-    Commands().cmdloop()
+    print("Number of command-line arguments: ", len(sys.argv))
+    print(sys.argv[0])
+    commands = Commands()
+    commands.cmdloop()
