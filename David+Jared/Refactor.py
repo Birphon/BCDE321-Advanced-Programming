@@ -46,7 +46,10 @@ class Game:
         self.can_cower = can_cower
         self.room_item = None
 
+    #  Puts the game into starting state using users input of the start command
     def start_game(self):
+        """ Pre-condition: tiles and card not loaded in game in state of none
+            Post-condition: tiles and card loaded in game in state of starting """
         self.load_tiles()
         self.load_dev_cards()
         print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
@@ -57,7 +60,10 @@ class Game:
                 self.state = "Rotating"
                 break
 
+    #  Loads the games different states and assigns command line text to them
     def get_game(self):
+        """ Pre-condition: User has typed start command game is in starting state
+            Post-condition: The assigned text is shown to the player depending on the state and command used """
         try:
             s = ''
             f = ''
@@ -79,7 +85,10 @@ class Game:
         except AttributeError as e:
             print("ERROR: Unable to load game states, please try again", e)
 
+    #  Shows player there current stats
     def get_player_status(self):
+        """ Pre-condition: Player types status command and Game is in one of the active states Moving, Rotating, Choosing or Drawing
+            Post-condition: Player is shown current stats and can continue the game """
         return print(f'It is {self.get_time()} pm \n'
                      f'The player currently has {self.player.get_health()} health \n'
                      f'The player currently has {self.player.get_attack()} attack \n'
@@ -91,6 +100,8 @@ class Game:
 
     # Load tiles from the Excel file, added error checking - Daniel
     def load_tiles(self):
+        """ Pre-condition: Game has not started and the file containing the tiles can be loaded
+            Post-condition: Games starts and tiles are loaded in """
         try:
             excel_data = pd.read_excel('Tiles.xlsx')
             tiles = []
@@ -114,7 +125,10 @@ class Game:
         except OSError as e:
             print("ERROR: Unable to access file please check file location", e)
 
+    # Lets player draw tiles as the move- Daniel
     def draw_tile(self, x, y):
+        """ Pre-condition: Game has loaded file containing tiles, player has typed a move command
+            Post-condition: Games draws a random tile that player sees the name of and can be placed """
         if self.get_current_tile().type == "Indoor":
             if len(self.indoor_tiles) == 0:
                 return print("No more indoor tiles")
@@ -140,6 +154,8 @@ class Game:
 
     # Load cards from Excel file, added error checking - Daniel
     def load_dev_cards(self):
+        """ Pre-condition: Game has not started and the file containing the card can be loaded
+            Post-condition: Games starts and cards are loaded in """
         try:
             card_data = pd.read_excel('DevCards.xlsx')
             for card in card_data.iterrows():
@@ -159,7 +175,10 @@ class Game:
         except OSError as e:
             print("ERROR: Unable to access file please check file location", e)
 
+    #  Moves the player to a new location when in the right state
     def move_player(self, x, y):
+        """ Pre-condition: Game is in moving or running away state and there is a tile for player to move to
+            Post-condition: player is moved to new tile """
         self.player.set_y(y)
         self.player.set_x(x)
         if self.state == "Running":
@@ -170,9 +189,12 @@ class Game:
     def get_tile_at(self, x, y):
         return self.tiles[(x, y)]
 
+    #  Lets player select a direction to move using tile doors
     def select_move(self, direction):
+        """ Pre-condition: Game is in moving or running away state tile has doors player can use
+            Post-condition: player is able to select a door using a direction command"""
         x, y = self.get_destination_coords(direction)
-        if self.check_for_door(direction):  # If there's a door where the player tried to move
+        if self.check_for_door(direction):
             self.current_move_direction = direction
             if self.check_for_room(x, y) is False:
                 if self.state == "Running":
@@ -1171,3 +1193,4 @@ if __name__ == "__main__":
     print(sys.argv[0])
     commands = Commands()
     commands.cmdloop()
+
