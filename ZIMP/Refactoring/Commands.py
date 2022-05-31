@@ -2,6 +2,7 @@ import cmd
 from Player import Player
 from Game import Game
 from Directions import Direction
+import pickle
 
 
 class Commands(cmd.Cmd):

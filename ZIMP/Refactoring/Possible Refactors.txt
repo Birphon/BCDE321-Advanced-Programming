@@ -1,0 +1,16 @@
+Possible:
+
+Composite:
+	make a Composite for all the cards?
+	    type: outdoor
+	    type: indoor
+	    all cards sit as Composite
+
+Factory:
+	all the IF statements in Game
+
+???:
+	Splitting up the 1 page into multiple
+
+Abstract/Factory:
+    Game.py IF statements

@@ -1,5 +1,5 @@
 import random
-from turtle import pd
+import pandas as pd
 from DevCard import DevCard
 from OutdoorTile import OutdoorTile
 from IndoorTile import IndoorTile
@@ -62,7 +62,8 @@ class Game:
                 s = "There are no doors you can go through in this room, you will have to make your-own" \
                     "Choose where to place a new door by typing 'choose' and a direction 'n, e, s, w' "
             if self.state == "Drawing Dev Card":
-                s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing depending on the time"
+                s = "Type 'draw' to draw a random card this may lead to a zombie attack, and item or nothing " \
+                    "depending on the time "
             for door in self.chosen_tile.doors:
                 f += door.name + ', '
             return print(f' Your current tile is {self.chosen_tile.name}, the available doors in this room are {f}\n '
@@ -73,8 +74,8 @@ class Game:
 
     #  Shows player there current stats
     def get_player_status(self):
-        """ Pre-condition: Player types status command and Game is in one of the active states Moving, Rotating, Choosing or Drawing
-            Post-condition: Player is shown current stats and can continue the game """
+        """ Pre-condition: Player types status command and Game is in one of the active states Moving, Rotating,
+        Choosing or Drawing Post-condition: Player is shown current stats and can continue the game """
         return print(f'It is {self.get_time()} pm \n'
                      f'The player currently has {self.player.get_health()} health \n'
                      f'The player currently has {self.player.get_attack()} attack \n'
@@ -98,12 +99,12 @@ class Game:
                 if tile[2] == "Outdoor":
                     new_tile = OutdoorTile(tile[0], tile[1], doors)
                     if tile[0] == "Patio":
-                        new_tile.set_entrance(dir.NORTH)
+                        new_tile.set_entrance(Direction.NORTH)
                     self.outdoor_tiles.append(new_tile)
                 if tile[2] == "Indoor":
                     new_tile = IndoorTile(tile[0], tile[1], doors)
                     if tile[0] == "Dining Room":
-                        new_tile.set_entrance(dir.NORTH)
+                        new_tile.set_entrance(Direction.NORTH)
                     self.indoor_tiles.append(new_tile)
 
         except FileNotFoundError as e:
