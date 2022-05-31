@@ -1,3 +1,11 @@
+import random
+from turtle import pd
+from DevCard import DevCard
+from OutdoorTile import OutdoorTile
+from IndoorTile import IndoorTile
+from Directions import Direction
+
+
 class Game:
     def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
                  dev_cards=None, state="Starting", current_move_direction=None,
@@ -191,13 +199,13 @@ class Game:
             return False
 
     def get_destination_coords(self, direction):
-        if direction == dir.NORTH:
+        if direction == Direction.NORTH:
             return self.player.get_x(), self.player.get_y() - 1
-        if direction == dir.SOUTH:
+        if direction == Direction.SOUTH:
             return self.player.get_x(), self.player.get_y() + 1
-        if direction == dir.EAST:
+        if direction == Direction.EAST:
             return self.player.get_x() + 1, self.player.get_y()
-        if direction == dir.WEST:
+        if direction == Direction.WEST:
             return self.player.get_x() - 1, self.player.get_y()
 
     def check_for_door(self, direction):
@@ -216,45 +224,45 @@ class Game:
     def check_doors_align(self, direction):
         if self.chosen_tile.name == "Foyer":
             return True
-        if direction == dir.NORTH:
-            if dir.SOUTH not in self.chosen_tile.doors:
+        if direction == Direction.NORTH:
+            if Direction.SOUTH not in self.chosen_tile.doors:
                 return False
-        if direction == dir.SOUTH:
-            if dir.NORTH not in self.chosen_tile.doors:
+        if direction == Direction.SOUTH:
+            if Direction.NORTH not in self.chosen_tile.doors:
                 return False
-        if direction == dir.WEST:
-            if dir.EAST not in self.chosen_tile.doors:
+        if direction == Direction.WEST:
+            if Direction.EAST not in self.chosen_tile.doors:
                 return False
-        elif direction == dir.EAST:
-            if dir.WEST not in self.chosen_tile.doors:
+        elif direction == Direction.EAST:
+            if Direction.WEST not in self.chosen_tile.doors:
                 return False
         return True
 
     def check_entrances_align(self):
-        if self.get_current_tile().entrance == dir.NORTH:
-            if self.chosen_tile.entrance == dir.SOUTH:
+        if self.get_current_tile().entrance == Direction.NORTH:
+            if self.chosen_tile.entrance == Direction.SOUTH:
                 return True
-        if self.get_current_tile().entrance == dir.SOUTH:
-            if self.chosen_tile.entrance == dir.NORTH:
+        if self.get_current_tile().entrance == Direction.SOUTH:
+            if self.chosen_tile.entrance == Direction.NORTH:
                 return True
-        if self.get_current_tile().entrance == dir.WEST:
-            if self.chosen_tile.entrance == dir.EAST:
+        if self.get_current_tile().entrance == Direction.WEST:
+            if self.chosen_tile.entrance == Direction.EAST:
                 return True
-        if self.get_current_tile().entrance == dir.EAST:
-            if self.chosen_tile.entrance == dir.WEST:
+        if self.get_current_tile().entrance == Direction.EAST:
+            if self.chosen_tile.entrance == Direction.WEST:
                 return True
         return print(" Dining room and Patio entrances dont align")
 
     def check_dining_room_has_exit(self):
         tile = self.chosen_tile
         if tile.name == "Dining Room":
-            if self.current_move_direction == dir.NORTH and tile.entrance == dir.SOUTH:
+            if self.current_move_direction == Direction.NORTH and tile.entrance == Direction.SOUTH:
                 return False
-            if self.current_move_direction == dir.SOUTH and tile.entrance == dir.NORTH:
+            if self.current_move_direction == Direction.SOUTH and tile.entrance == Direction.NORTH:
                 return False
-            if self.current_move_direction == dir.EAST and tile.entrance == dir.WEST:
+            if self.current_move_direction == Direction.EAST and tile.entrance == Direction.WEST:
                 return False
-            if self.current_move_direction == dir.WEST and tile.entrance == dir.EAST:
+            if self.current_move_direction == Direction.WEST and tile.entrance == Direction.EAST:
                 return False
         else:
             return True
@@ -519,13 +527,13 @@ class Game:
     def resolve_doors(n, e, s, w):
         doors = []
         if n == 1:
-            doors.append(dir.NORTH)
+            doors.append(Direction.NORTH)
         if e == 1:
-            doors.append(dir.EAST)
+            doors.append(Direction.EAST)
         if s == 1:
-            doors.append(dir.SOUTH)
+            doors.append(Direction.SOUTH)
         if w == 1:
-            doors.append(dir.WEST)
+            doors.append(Direction.WEST)
         return doors
 
     def lose_game(self):

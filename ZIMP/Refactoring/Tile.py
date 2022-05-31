@@ -1,3 +1,6 @@
+from Directions import Direction
+
+
 class Tile:
     def __init__(self, name, x=16, y=16, effect=None, doors=None, entrance=None):  # Added default arguments - Daniel
         if doors is None:
@@ -22,26 +25,26 @@ class Tile:
         self.entrance = direction
 
     def rotate_entrance(self):
-        if self.entrance == dir.NORTH:
-            self.set_entrance(dir.EAST)
+        if self.entrance == Direction.NORTH:
+            self.set_entrance(Direction.EAST)
             return
-        if self.entrance == dir.SOUTH:
-            self.set_entrance(dir.WEST)
+        if self.entrance == Direction.SOUTH:
+            self.set_entrance(Direction.WEST)
             return
-        if self.entrance == dir.EAST:
-            self.set_entrance(dir.SOUTH)
+        if self.entrance == Direction.EAST:
+            self.set_entrance(Direction.SOUTH)
             return
-        if self.entrance == dir.WEST:
-            self.set_entrance(dir.NORTH)
+        if self.entrance == Direction.WEST:
+            self.set_entrance(Direction.NORTH)
             return
 
     def rotate_tile(self):
         for door in self.doors:
-            if door == dir.NORTH:
-                self.change_door_position(self.doors.index(door), dir.EAST)
-            if door == dir.EAST:
-                self.change_door_position(self.doors.index(door), dir.SOUTH)
-            if door == dir.SOUTH:
-                self.change_door_position(self.doors.index(door), dir.WEST)
-            if door == dir.WEST:
-                self.change_door_position(self.doors.index(door), dir.NORTH)
+            if door == Direction.NORTH:
+                self.change_door_position(self.doors.index(door), Direction.EAST)
+            if door == Direction.EAST:
+                self.change_door_position(self.doors.index(door), Direction.SOUTH)
+            if door == Direction.SOUTH:
+                self.change_door_position(self.doors.index(door), Direction.WEST)
+            if door == Direction.WEST:
+                self.change_door_position(self.doors.index(door), Direction.NORTH)

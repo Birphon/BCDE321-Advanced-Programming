@@ -1,3 +1,6 @@
+from Tile import Tile
+
+
 class OutdoorTile(Tile):
     def __init__(self, name, effect=None, doors=None, x=16, y=16, entrance=None):
         if doors is None:
