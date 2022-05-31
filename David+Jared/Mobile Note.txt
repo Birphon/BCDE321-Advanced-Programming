@@ -1,2 +1,0 @@
-We need to add a "Void" if we have something run it never ends
-i.e. if you had a gun and you shot at a target and missed the bullet will keep going, if you shoot a million bullets you will have a million bullets still "flying" lagging out the whole game
