@@ -1,16 +1,21 @@
 Possible:
 
-Composite:
-	make a Composite for all the cards?
-	    type: outdoor
-	    type: indoor
-	    all cards sit as Composite
+	Composite (Probs not this):
+		make a Composite for all the cards?
+		    type: outdoor
+		    type: indoor
+		    all cards sit as Composite
 
-Factory:
-	all the IF statements in Game
+	Factory:
+		all the IF statements in Game
 
-???:
-	Splitting up the 1 page into multiple
+	Single Responsibility:
+		Splitting up the 1 page into multiple
 
-Abstract/Factory:
-    Game.py IF statements
+	Long Class
+		Game.py is really long
+
+	Abstract/Factory:
+		Game.py IF statements (Depends on how Long Class gets split i guess)
+			Attack/Move/DrawCard(?) into "Action.py"
+			Loading stuff -> Loader.py
