@@ -7,20 +7,17 @@ class Game:
     def __init__(self, player, time=9, game_map=None, chosen_tile=None,
                   state="Starting", current_move_direction=None,
                  can_cower=True): # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
+        if game_map is None:
+            game_map = {}
 #        if indoor_tiles is None:
 #            indoor_tiles = []
 #        if outdoor_tiles is None:
 #            outdoor_tiles = []
 #       if dev_cards is None:
 #            dev_cards = []
-        if game_map is None:
-            game_map = {}
 
         self.player = player
         self.time = time
-#        self.indoor_tiles = indoor_tiles
-#        self.outdoor_tiles = outdoor_tiles
-#        self.dev_cards = dev_cards
         self.tiles = game_map
         self.chosen_tile = chosen_tile
         self.state = state
@@ -28,6 +25,9 @@ class Game:
         self.current_zombies = 0
         self.can_cower = can_cower
         self.room_item = None
+#        self.indoor_tiles = indoor_tiles
+#        self.outdoor_tiles = outdoor_tiles
+#        self.dev_cards = dev_cards
 
     #  Puts the game into starting state using users input of the start command
     def start_game(self):
