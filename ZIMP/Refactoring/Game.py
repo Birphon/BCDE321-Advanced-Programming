@@ -1,29 +1,26 @@
 import random
-import pandas as pd
-from DevCard import DevCard
-from OutdoorTile import OutdoorTile
-from IndoorTile import IndoorTile
 from Directions import Direction
+from Loader import Loader
 
 
 class Game:
-    def __init__(self, player, time=9, game_map=None, indoor_tiles=None, outdoor_tiles=None, chosen_tile=None,
-                 dev_cards=None, state="Starting", current_move_direction=None,
-                 can_cower=True):
-        if indoor_tiles is None:
-            indoor_tiles = []
-        if outdoor_tiles is None:
-            outdoor_tiles = []
-        if dev_cards is None:
-            dev_cards = []
+    def __init__(self, player, time=9, game_map=None, chosen_tile=None,
+                  state="Starting", current_move_direction=None,
+                 can_cower=True): # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
+#        if indoor_tiles is None:
+#            indoor_tiles = []
+#        if outdoor_tiles is None:
+#            outdoor_tiles = []
+#       if dev_cards is None:
+#            dev_cards = []
         if game_map is None:
             game_map = {}
 
         self.player = player
         self.time = time
-        self.indoor_tiles = indoor_tiles
-        self.outdoor_tiles = outdoor_tiles
-        self.dev_cards = dev_cards
+#        self.indoor_tiles = indoor_tiles
+#        self.outdoor_tiles = outdoor_tiles
+#        self.dev_cards = dev_cards
         self.tiles = game_map
         self.chosen_tile = chosen_tile
         self.state = state
@@ -36,8 +33,10 @@ class Game:
     def start_game(self):
         """ Pre-condition: tiles and card not loaded in game in state of none
             Post-condition: tiles and card loaded in game in state of starting """
-        self.load_tiles()
-        self.load_dev_cards()
+        Loader.load_tiles()
+        Loader.load_dev_cards()
+        #self.load_tiles()
+        #self.load_dev_cards()
         print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
               'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
         for tile in self.indoor_tiles:
@@ -85,32 +84,35 @@ class Game:
     def get_time(self):
         return self.time
 
-    # Load tiles from the Excel file, added error checking - Daniel
-    def load_tiles(self):
-        """ Pre-condition: Game has not started and the file containing the tiles can be loaded
-            Post-condition: Games starts and tiles are loaded in """
-        try:
-            excel_data = pd.read_excel('Tiles.xlsx')
-            tiles = []
-            for name in excel_data.iterrows():
-                tiles.append(name[1].tolist())
-            for tile in tiles:
-                doors = self.resolve_doors(tile[3], tile[4], tile[5], tile[6])
-                if tile[2] == "Outdoor":
-                    new_tile = OutdoorTile(tile[0], tile[1], doors)
-                    if tile[0] == "Patio":
-                        new_tile.set_entrance(Direction.NORTH)
-                    self.outdoor_tiles.append(new_tile)
-                if tile[2] == "Indoor":
-                    new_tile = IndoorTile(tile[0], tile[1], doors)
-                    if tile[0] == "Dining Room":
-                        new_tile.set_entrance(Direction.NORTH)
-                    self.indoor_tiles.append(new_tile)
 
-        except FileNotFoundError as e:
-            print("ERROR: File not found please check Excel file name", e)
-        except OSError as e:
-            print("ERROR: Unable to access file please check file location", e)
+# -- Moved to Loader.py --
+
+    # Load tiles from the Excel file, added error checking - Daniel
+#    def load_tiles(self):
+#        """ Pre-condition: Game has not started and the file containing the tiles can be loaded
+#            Post-condition: Games starts and tiles are loaded in """
+#        try:
+#            excel_data = pd.read_excel('Tiles.xlsx')
+#            tiles = []
+#            for name in excel_data.iterrows():
+#                tiles.append(name[1].tolist())
+#            for tile in tiles:
+#                doors = self.resolve_doors(tile[3], tile[4], tile[5], tile[6])
+#                if tile[2] == "Outdoor":
+#                    new_tile = OutdoorTile(tile[0], tile[1], doors)
+#                    if tile[0] == "Patio":
+#                        new_tile.set_entrance(Direction.NORTH)
+#                    self.outdoor_tiles.append(new_tile)
+#                if tile[2] == "Indoor":
+#                    new_tile = IndoorTile(tile[0], tile[1], doors)
+#                    if tile[0] == "Dining Room":
+#                        new_tile.set_entrance(Direction.NORTH)
+#                    self.indoor_tiles.append(new_tile)
+#
+#        except FileNotFoundError as e:
+#            print("ERROR: File not found please check Excel file name", e)
+#        except OSError as e:
+#            print("ERROR: Unable to access file please check file location", e)
 
     # Lets player draw tiles as the move- Daniel
     def draw_tile(self, x, y):
@@ -139,28 +141,31 @@ class Game:
             tile.set_y(y)
             self.chosen_tile = tile
 
-    # Load cards from Excel file, added error checking - Daniel
-    def load_dev_cards(self):
-        """ Pre-condition: Game has not started and the file containing the card can be loaded
-            Post-condition: Games starts and cards are loaded in """
-        try:
-            card_data = pd.read_excel('DevCards.xlsx')
-            for card in card_data.iterrows():
-                item = card[1][0]
-                event_one = (card[1][1], card[1][2])
-                event_two = (card[1][3], card[1][4])
-                event_three = (card[1][5], card[1][6])
-                charges = card[1][7]
-                dev_card = DevCard(item, charges, event_one, event_two, event_three)
-                self.dev_cards.append(dev_card)
-            random.shuffle(self.dev_cards)
-            self.dev_cards.pop(0)
-            self.dev_cards.pop(0)
 
-        except FileNotFoundError as e:
-            print("ERROR: File not found please check Excel file name", e)
-        except OSError as e:
-            print("ERROR: Unable to access file please check file location", e)
+# -- Moved to Loader.py --
+
+    # Load cards from Excel file, added error checking - Daniel
+#    def load_dev_cards(self):
+#        """ Pre-condition: Game has not started and the file containing the card can be loaded
+#            Post-condition: Games starts and cards are loaded in """
+#        try:
+#            card_data = pd.read_excel('DevCards.xlsx')
+#            for card in card_data.iterrows():
+#                item = card[1][0]
+#                event_one = (card[1][1], card[1][2])
+#                event_two = (card[1][3], card[1][4])
+#                event_three = (card[1][5], card[1][6])
+#                charges = card[1][7]
+#                dev_card = DevCard(item, charges, event_one, event_two, event_three)
+#                self.dev_cards.append(dev_card)
+#            random.shuffle(self.dev_cards)
+#            self.dev_cards.pop(0)
+#            self.dev_cards.pop(0)
+#
+#        except FileNotFoundError as e:
+#            print("ERROR: File not found please check Excel file name", e)
+#        except OSError as e:
+#            print("ERROR: Unable to access file please check file location", e)
 
     #  Moves the player to a new location when in the right state
     def move_player(self, x, y):
