@@ -17,7 +17,8 @@ class Commands(cmd.Cmd):
 
     # Overwrites default command line error message for better error handing - Daniel
     def default(self, line):
-        self.stdout.write('Unknown command used: %s\n please use all lowercase letters (type "help" for more info)\n' % (line,))
+        self.stdout.write(
+            'Unknown command used: %s\n please use all lowercase letters (type "help" for more info)\n' % (line,))
 
     # Puts the game into start state
     def do_start(self, line):
@@ -26,7 +27,8 @@ class Commands(cmd.Cmd):
                 self.game.start_game()
                 self.game.get_game()
             else:
-                print("You are currently playing a game type 'restart' if you want to start again")
+                print(
+                    "You are currently playing a game type 'restart' if you want to start again")
         except SyntaxError:
             print(Commands.default)
 
@@ -146,13 +148,18 @@ class Commands(cmd.Cmd):
                     if self.game.get_current_tile().name == "Dining Room" \
                             and self.game.current_move_direction == self.game.get_current_tile().entrance:
                         if self.game.check_entrances_align():
-                            self.game.place_tile(self.game.chosen_tile.x, self.game.chosen_tile.y)
-                            self.game.move_player(self.game.chosen_tile.x, self.game.chosen_tile.y)
+                            self.game.place_tile(
+                                self.game.chosen_tile.x, self.game.chosen_tile.y)
+                            self.game.move_player(
+                                self.game.chosen_tile.x, self.game.chosen_tile.y)
                     elif self.game.check_doors_align(self.game.current_move_direction):
-                        self.game.place_tile(self.game.chosen_tile.x, self.game.chosen_tile.y)
-                        self.game.move_player(self.game.chosen_tile.x, self.game.chosen_tile.y)
+                        self.game.place_tile(
+                            self.game.chosen_tile.x, self.game.chosen_tile.y)
+                        self.game.move_player(
+                            self.game.chosen_tile.x, self.game.chosen_tile.y)
                     else:
-                        print(" Please rotate the tile you are placing until a door lines up with the direction you moved")
+                        print(
+                            " Please rotate the tile you are placing until a door lines up with the direction you moved")
                 self.game.get_game()
             else:
                 print("You currently don't have a tile selected")
@@ -263,7 +270,8 @@ class Commands(cmd.Cmd):
         try:
             if self.game.state == "Swapping Item":
                 self.game.drop_item(line)
-                self.game.player.add_item(self.game.room_item[0], self.game.room_item[1])
+                self.game.player.add_item(
+                    self.game.room_item[0], self.game.room_item[1])
                 self.game.room_item = None
                 self.game.get_game()
         except SyntaxError:

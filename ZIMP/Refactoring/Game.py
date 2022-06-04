@@ -5,8 +5,8 @@ from Loader import Loader
 
 class Game:
     def __init__(self, player, time=9, game_map=None, chosen_tile=None,
-                  state="Starting", current_move_direction=None,
-                 can_cower=True): # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
+                 state="Starting", current_move_direction=None,
+                 can_cower=True):  # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
         if game_map is None:
             game_map = {}
 #        if indoor_tiles is None:
@@ -35,8 +35,8 @@ class Game:
             Post-condition: tiles and card loaded in game in state of starting """
         Loader.load_tiles()
         Loader.load_dev_cards()
-        #self.load_tiles()
-        #self.load_dev_cards()
+        # self.load_tiles()
+        # self.load_dev_cards()
         print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
               'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
         for tile in self.indoor_tiles:
@@ -115,6 +115,7 @@ class Game:
 #            print("ERROR: Unable to access file please check file location", e)
 
     # Lets player draw tiles as the move- Daniel
+
     def draw_tile(self, x, y):
         """ Pre-condition: Game has loaded file containing tiles, player has typed a move command
             Post-condition: Games draws a random tile that player sees the name of and can be placed """
@@ -129,7 +130,8 @@ class Game:
                 tile.set_y(y)
                 self.chosen_tile = tile
             else:
-                tile = random.choice(self.indoor_tiles)  # Chooses a random indoor tile and places it
+                # Chooses a random indoor tile and places it
+                tile = random.choice(self.indoor_tiles)
                 tile.set_x(x)
                 tile.set_y(y)
                 self.chosen_tile = tile
@@ -168,6 +170,7 @@ class Game:
 #            print("ERROR: Unable to access file please check file location", e)
 
     #  Moves the player to a new location when in the right state
+
     def move_player(self, x, y):
         """ Pre-condition: Game is in moving or running away state and there is a tile for player to move to
             Post-condition: player is moved to new tile """
@@ -363,7 +366,8 @@ class Game:
                     self.get_game()
             else:
                 self.room_item = [next_card.get_item(), next_card.charges]
-                response = input("You already have two items, do you want to drop one of them? (Y/N) ")
+                response = input(
+                    "You already have two items, do you want to drop one of them? (Y/N) ")
                 if response == "Y" or response == "y":
                     self.state = "Swapping Item"
                 else:
@@ -373,7 +377,8 @@ class Game:
             if self.get_current_tile().name == "Garden" or "Kitchen":
                 self.trigger_room_effect(self.get_current_tile().name)
         elif event[0] == "Zombies":
-            print(f"There are {event[1]} zombies in this room, prepare to fight!")
+            print(
+                f"There are {event[1]} zombies in this room, prepare to fight!")
             self.current_zombies = int(event[1])
             self.state = "Attacking"
 
@@ -382,12 +387,14 @@ class Game:
         zombies = self.current_zombies
         if len(item) == 2:
             if "Oil" in item and "Candle" in item:
-                print("You used the oil and the candle to attack the zombies, it kills all of them")
+                print(
+                    "You used the oil and the candle to attack the zombies, it kills all of them")
                 self.drop_item("Oil")
                 self.state = "Moving"
                 return
             elif "Gasoline" in item and "Candle" in item:
-                print("You used the gasoline and the candle to attack the zombies, it kills all of them")
+                print(
+                    "You used the gasoline and the candle to attack the zombies, it kills all of them")
                 self.drop_item("Gasoline")
                 self.state = "Moving"
                 return
@@ -443,7 +450,8 @@ class Game:
         self.select_move(direction)
         if self.state == "Moving":
             self.player.add_health(health_lost)
-            print(f"You run away from the zombies, and lose {health_lost} health")
+            print(
+                f"You run away from the zombies, and lose {health_lost} health")
             self.can_cower = True
             if self.get_current_tile().name == "Garden" or "Kitchen":
                 self.trigger_room_effect(self.get_current_tile().name)
@@ -453,11 +461,13 @@ class Game:
     def trigger_room_effect(self, room_name):
         if room_name == "Garden":
             self.player.add_health(1)
-            print(f"After ending your turn in the {room_name} you have gained one health")
+            print(
+                f"After ending your turn in the {room_name} you have gained one health")
             self.state = "Moving"
         if room_name == "Kitchen":
             self.player.add_health(1)
-            print(f"After ending your turn in the {room_name} you have gained one health")
+            print(
+                f"After ending your turn in the {room_name} you have gained one health")
             self.state = "Moving"
 
     def trigger_cower(self):

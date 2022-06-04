@@ -2,7 +2,8 @@ from Directions import Direction
 
 
 class Tile:
-    def __init__(self, name, x=16, y=16, effect=None, doors=None, entrance=None):  # Added default arguments - Daniel
+    # Added default arguments - Daniel
+    def __init__(self, name, x=16, y=16, effect=None, doors=None, entrance=None):
         if doors is None:
             doors = []
         self.name = name
@@ -41,10 +42,14 @@ class Tile:
     def rotate_tile(self):
         for door in self.doors:
             if door == Direction.NORTH:
-                self.change_door_position(self.doors.index(door), Direction.EAST)
+                self.change_door_position(
+                    self.doors.index(door), Direction.EAST)
             if door == Direction.EAST:
-                self.change_door_position(self.doors.index(door), Direction.SOUTH)
+                self.change_door_position(
+                    self.doors.index(door), Direction.SOUTH)
             if door == Direction.SOUTH:
-                self.change_door_position(self.doors.index(door), Direction.WEST)
+                self.change_door_position(
+                    self.doors.index(door), Direction.WEST)
             if door == Direction.WEST:
-                self.change_door_position(self.doors.index(door), Direction.NORTH)
+                self.change_door_position(
+                    self.doors.index(door), Direction.NORTH)
