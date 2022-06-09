@@ -3,6 +3,7 @@ import pickle
 from Directions import Direction
 from Loader import Loader
 from Action import Action
+from Tile import Tile
 
 
 class Game:
@@ -28,6 +29,7 @@ class Game:
         self.current_zombies = 0
         self.can_cower = can_cower
         self.room_item = None
+        self.load = Loader()
 
         #   self.indoor_tiles = indoor_tiles
         #   self.outdoor_tiles = outdoor_tiles
@@ -37,15 +39,15 @@ class Game:
     def start_game(self):
         """ Pre-condition: tiles and card not loaded in game in state of none
             Post-condition: tiles and card loaded in game in state of starting """
-        load = Loader()
-        load.load_tiles()
-        load.load_dev_cards()
+        # load = Loader()
+        self.load.load_tiles()
+        self.load.load_dev_cards()
         print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
               'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
-        for tile in self.indoor_tiles:
+        for tile in self.load.indoor_tiles:
             if tile.name == 'Foyer':
-                self.chosen_tile = tile
-                self.state = "Rotating"
+                self.load.chosen_tile = tile
+                self.load.state = "Rotating"
                 break
 
     #  Loads the games different states and assigns command line text to them
