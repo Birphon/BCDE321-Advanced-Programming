@@ -9,15 +9,16 @@ from DevCard import DevCard
 
 class Loader:
     def __init__(self, indoor_tiles=None, outdoor_tiles=None, dev_cards=None):
-        self.outdoor_tiles = OutdoorTile()
-        self.indoor_tiles = IndoorTile()
-        self.dev_cards = DevCard()
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
             outdoor_tiles = []
         if dev_cards is None:
             dev_cards = []
+
+        self.indoor_tiles = indoor_tiles
+        self.outdoor_tiles = outdoor_tiles
+        self.dev_cards = dev_cards
 
         # Load tiles from the Excel file, added error checking - Daniel
 
