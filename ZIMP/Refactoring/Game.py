@@ -1,4 +1,5 @@
 import random
+import pickle
 from Directions import Direction
 from Loader import Loader
 from Action import Action
@@ -27,18 +28,17 @@ class Game:
         self.can_cower = can_cower
         self.room_item = None
 
-    #        self.indoor_tiles = indoor_tiles
-    #        self.outdoor_tiles = outdoor_tiles
-    #        self.dev_cards = dev_cards
+        #   self.indoor_tiles = indoor_tiles
+        #   self.outdoor_tiles = outdoor_tiles
+        #   self.dev_cards = dev_cards
 
     #  Puts the game into starting state using users input of the start command
     def start_game(self):
         """ Pre-condition: tiles and card not loaded in game in state of none
             Post-condition: tiles and card loaded in game in state of starting """
-        Loader.load_tiles()
-        Loader.load_dev_cards()
-        # self.load_tiles()
-        # self.load_dev_cards()
+        load = Loader()
+        load.load_tiles()
+        load.load_dev_cards()
         print('The dead walk the earth. You must search the house for the Evil Temple, and find the zombie totem. Then '
               'take the totem outside, and bury it in the Graveyard, all before the clock strikes midnight. ')
         for tile in self.indoor_tiles:
@@ -221,19 +221,6 @@ class Game:
 
     def get_current_tile(self):
         return self.tiles[self.player.get_x(), self.player.get_y()]
-
-    @staticmethod
-    def resolve_doors(n, e, s, w):
-        doors = []
-        if n == 1:
-            doors.append(Direction.NORTH)
-        if e == 1:
-            doors.append(Direction.EAST)
-        if s == 1:
-            doors.append(Direction.SOUTH)
-        if w == 1:
-            doors.append(Direction.WEST)
-        return doors
 
     def lose_game(self):
         self.state = "Game Over"

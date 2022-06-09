@@ -19,3 +19,9 @@ Possible:
 		Game.py IF statements (Depends on how Long Class gets split i guess)
 			Attack/Move/DrawCard(?) into "Action.py"
 			Loading stuff -> Loader.py
+
+        Tiles
+        Item's
+        Zombie Action's?
+            (Attack, Cower, Run)
+        DevCards

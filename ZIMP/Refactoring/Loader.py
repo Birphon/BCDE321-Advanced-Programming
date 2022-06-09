@@ -9,6 +9,9 @@ from DevCard import DevCard
 
 class Loader:
     def __init__(self, indoor_tiles=None, outdoor_tiles=None, dev_cards=None):
+        self.outdoor_tiles = OutdoorTile()
+        self.indoor_tiles = IndoorTile()
+        self.dev_cards = DevCard()
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
@@ -17,6 +20,7 @@ class Loader:
             dev_cards = []
 
         # Load tiles from the Excel file, added error checking - Daniel
+
     def load_tiles(self):
         """ Pre-condition: Game has not started and the file containing the tiles can be loaded
             Post-condition: Games starts and tiles are loaded in """
@@ -44,6 +48,7 @@ class Loader:
             print("ERROR: Unable to access file please check file location", e)
 
         # Load cards from Excel file, added error checking - Daniel
+
     def load_dev_cards(self):
         """ Pre-condition: Game has not started and the file containing the card can be loaded
             Post-condition: Games starts and cards are loaded in """
@@ -66,3 +71,16 @@ class Loader:
             print("ERROR: File not found please check Excel file name", e)
         except OSError as e:
             print("ERROR: Unable to access file please check file location", e)
+
+    @staticmethod
+    def resolve_doors(n, e, s, w):
+        doors = []
+        if n == 1:
+            doors.append(Direction.NORTH)
+        if e == 1:
+            doors.append(Direction.EAST)
+        if s == 1:
+            doors.append(Direction.SOUTH)
+        if w == 1:
+            doors.append(Direction.WEST)
+        return doors
