@@ -6,9 +6,10 @@ from Action import Action
 
 
 class Game:
+    # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
     def __init__(self, player, time=9, game_map=None, chosen_tile=None,
                  state="Starting", current_move_direction=None,
-                 can_cower=True):  # indoor_tiles=None, outdoor_tiles=None, dev_cards=None,(Moved to Loader.py)
+                 can_cower=True):
         if game_map is None:
             game_map = {}
         #        if indoor_tiles is None:
