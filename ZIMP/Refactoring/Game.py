@@ -28,7 +28,7 @@ class Game:
         self.can_cower = can_cower
         self.room_item = None
 
-        self.indoor_tiles = indoor_tiles
+        #   self.indoor_tiles = indoor_tiles
         #   self.outdoor_tiles = outdoor_tiles
         #   self.dev_cards = dev_cards
 
