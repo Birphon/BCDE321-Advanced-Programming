@@ -3,6 +3,7 @@ from Player import Player
 from Game import Game
 from Directions import Direction
 import pickle
+from Loader import Loader
 
 
 class Commands(cmd.Cmd):
@@ -14,6 +15,7 @@ class Commands(cmd.Cmd):
         self.prompt = "> "
         self.player = Player()
         self.game = Game(self.player)
+        self.load = Loader()
 
     # Overwrites default command line error message for better error handing - Daniel
     def default(self, line):
@@ -140,7 +142,7 @@ class Commands(cmd.Cmd):
     def do_place(self, line):
         try:
             if self.game.state == "Rotating":
-                if self.game.chosen_tile.name == "Foyer":
+                if self.load.chosen_tile.name == "Foyer":
                     self.game.place_tile(16, 16)
                 elif self.game.check_dining_room_has_exit() is False:
                     return print("Dining room entrance must face an empty tile")

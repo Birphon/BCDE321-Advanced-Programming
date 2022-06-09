@@ -8,7 +8,7 @@ from DevCard import DevCard
 
 
 class Loader:
-    def __init__(self, indoor_tiles=None, outdoor_tiles=None, dev_cards=None):
+    def __init__(self, indoor_tiles=None, outdoor_tiles=None, dev_cards=None, chosen_tile=None):
         if indoor_tiles is None:
             indoor_tiles = []
         if outdoor_tiles is None:
@@ -16,6 +16,7 @@ class Loader:
         if dev_cards is None:
             dev_cards = []
 
+        self.chosen_tile = chosen_tile
         self.indoor_tiles = indoor_tiles
         self.outdoor_tiles = outdoor_tiles
         self.dev_cards = dev_cards
